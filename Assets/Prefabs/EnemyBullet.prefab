@@ -137,3 +137,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diePEffect: {fileID: 6361326539378936758, guid: 12fee52395f8ce84e99344aa1aebb883, type: 3}
+  smallDiePEffect: {fileID: 6361326539378936758, guid: 030713b3790f9174fb745599ad14b87d, type: 3}

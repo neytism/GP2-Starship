@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour
     private float timeBtwShot;
     [SerializeField] private float startTimeBtwShots;
 
-    [SerializeField] private AudioClip _hitSound;
     
     [SerializeField] private bool _canFire = true;
     
@@ -46,15 +45,16 @@ public class Enemy : MonoBehaviour
         {
             //deploys particle before destroying object
             //particle system can be converted to pooling system if time possible
-            AudioSource.PlayClipAtPoint(_hitSound, gameObject.transform.position);
+            AudioManager.Instance.PlayOnce(AudioManager.Sounds.EnemyDeath);
             GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
             Destroy(particle, 3);
             
 
             if (col.gameObject.tag.Equals("Player")) {
                _player.ReduceHealth(_damage);
-           }
-           _player.AddKillCount();
+            }
+            
+            _player.AddKillCount();
             Destroy(gameObject);
         }
     }

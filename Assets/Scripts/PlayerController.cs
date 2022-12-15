@@ -30,8 +30,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _playerManager = GameObject.FindObjectOfType<PlayerManager>();
-        _weapon = _playerManager.SelectWeaponType(PlayerManager.Instance.GetSelectedCharacter());
+        WeaponHolder _weaponHolder = GetComponent<WeaponHolder>();
+        _weapon = _weaponHolder.SelectWeaponType(PlayerManager.Instance.GetSelectedCharacter());
         Debug.Log($"Selected on loading game scene: {PlayerManager.Instance.GetSelectedCharacter()}");
     }
 

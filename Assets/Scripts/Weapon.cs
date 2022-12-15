@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -16,7 +17,6 @@ public class Weapon : MonoBehaviour
     
 
     private ObjectPool _bulletPool;
-    [SerializeField] private int _bulletPoolCount = 30;
     
     private PlayerController _player;
     
@@ -30,10 +30,9 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
-        _bulletPool.Initialize(_bulletPrefab,_bulletPoolCount); // size depends on fore rate of player
+        _bulletPool.Initialize(_bulletPrefab);
     }
-    
-    
+
     public void FireWeapon()
     {
         if (this.GameObject().name.Equals("SpreadGun"))
@@ -42,7 +41,9 @@ public class Weapon : MonoBehaviour
             for (int i = 0; i < 5; i++)
             {
 
-                GameObject bullet = _bulletPool.CreateObject();
+                //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
+                GameObject bullet = _bulletPool.GetObject();
+                bullet.SetActive(true);
                 
                 switch (i)
                 {
@@ -67,7 +68,9 @@ public class Weapon : MonoBehaviour
         } else 
         {
             //get object from object pool instead of instantiating directly
-            GameObject bullet = _bulletPool.CreateObject();
+            GameObject bullet = _bulletPool.GetObject();
+            bullet.SetActive(true);
+            //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
             bullet.GetComponent<Rigidbody2D>().AddForce(_player.FirePoint.up * _fireForce,ForceMode2D.Impulse);
             StartCoroutine(BulletLife(bullet));
             

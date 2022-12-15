@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,12 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     private int _selectedCharacter;
-    
+
+    private void Start()
+    {
+        AudioManager.Instance.PlayLoop(AudioManager.Sounds.MainMenuBGM);
+    }
+
     public void Init(int value)
     {
         _selectedCharacter = value;
@@ -38,6 +44,7 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         SceneManager.LoadScene("GameScene");
+        AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.MainMenuBGM);
         Debug.Log($"Selected before loading: {_selectedCharacter}");
     }
     

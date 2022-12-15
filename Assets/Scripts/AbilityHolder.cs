@@ -15,6 +15,11 @@ using Debug = UnityEngine.Debug;
 //
 public class AbilityHolder : MonoBehaviour
 {
+    [SerializeField] private AbilityManager _ability1;
+    [SerializeField] private AbilityManager _ability2;
+    [SerializeField] private AbilityManager _ability3;
+
+    
     private AbilityManager _ability;
     private float _cooldownTime;
     
@@ -51,7 +56,7 @@ public class AbilityHolder : MonoBehaviour
     private void Awake()
     {
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
-        _ability = _playerManager.SelectAbilityType(PlayerManager.Instance.GetSelectedCharacter());
+        _ability = SelectAbilityType(PlayerManager.Instance.GetSelectedCharacter());
         _duration = _ability.ActiveTime;
         _cooldown = _ability.Cooldown;
         _CDBar.fillAmount = 1;
@@ -150,6 +155,22 @@ public class AbilityHolder : MonoBehaviour
         yield return new WaitForSeconds(gameObject.GetComponent<AbilityHolder>()._duration);
         gameObject.GetComponent<Player>().AOE.SetActive(false);
         Debug.Log("Explode End");
+    }
+    
+    public AbilityManager SelectAbilityType(int index)
+    {
+        
+        switch (index)
+        {
+            case 0:
+                return _ability1;
+            case 1:
+                return _ability2;
+            case 2:
+                return _ability3;
+        }
+
+        return _ability1;
     }
 
 }

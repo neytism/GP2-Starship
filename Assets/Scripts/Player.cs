@@ -58,6 +58,7 @@ public class Player : MonoBehaviour
     
     private void Awake()
     {
+        AudioManager.Instance.PlayFadeIn(AudioManager.Sounds.GameBGM,0.005f, .5f);
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
         _color = _playerManager.SelectCharacterSprite(PlayerManager.Instance.GetSelectedCharacter());
         gameObject.GetComponent<SpriteRenderer>().color = _color;

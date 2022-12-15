@@ -27,31 +27,7 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(this);
         }
-        
-        if (SceneManager.GetActiveScene().name.Equals("MainMenu"))
-        {
-            AudioManager.Instance.PlayLoop(AudioManager.Sounds.MainMenuBGM);
-        }else if (SceneManager.GetActiveScene().name.Equals("GameScene"))
-        {
-            AudioManager.Instance.PlayFadeIn(AudioManager.Sounds.GameBGM,0.005f, .5f);
-        }
     }
-
-    /*private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-        
-        DontDestroyOnLoad(this);
-        
-        
-    }*/
 
     #endregion
     
@@ -63,58 +39,6 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI _characterDescription;
 
     private static int _selectedCharacter;
-
-
-    private GameObject _weaponPrefab1;
-    private GameObject _weaponPrefab2;
-    private GameObject _weaponPrefab3;
-
-    [SerializeField] private AbilityManager _ability1;
-    [SerializeField] private AbilityManager _ability2;
-    [SerializeField] private AbilityManager _ability3;
-
-
-    private void Start()
-    {
-        
-    }
-
-  
-
-    public GameObject SelectWeaponType(int index)
-    {
-        _weaponPrefab1 = GameObject.Find("RapidGun");
-        _weaponPrefab2 = GameObject.Find("SpreadGun");
-        _weaponPrefab3 = GameObject.Find("ExplodeGun");
-        
-        switch (index)
-        {
-            case 0:
-                return _weaponPrefab1;
-            case 1:
-                return _weaponPrefab2;
-            case 2:
-                return _weaponPrefab3;
-        }
-
-        return _weaponPrefab1;
-    }
-    
-    public AbilityManager SelectAbilityType(int index)
-    {
-        
-        switch (index)
-        {
-            case 0:
-                return _ability1;
-            case 1:
-                return _ability2;
-            case 2:
-                return _ability3;
-        }
-
-        return _ability1;
-    }
 
     public Color SelectCharacterSprite(int index)
     {
@@ -141,6 +65,11 @@ public class PlayerManager : MonoBehaviour
     public int GetChartacterCount()
     {
         return _characters.Count;
+    }
+
+    public void SetSelected(int value)//for debug
+    {
+        _selectedCharacter = value;
     }
     
     
