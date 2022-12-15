@@ -59,7 +59,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void StopPlaying(Sounds sound)
+    public void StopPlayingBGM(Sounds sound)
     {
         AudioClip clip = getSoundClip(sound);
 
@@ -73,6 +73,37 @@ public class AudioManager : MonoBehaviour
             Debug.Log("No clip found for Sound Type");
         }
     }
+    
+    public void PausePlayingBGM(Sounds sound)
+    {
+        AudioClip clip = getSoundClip(sound);
+
+        if (clip != null)
+        {
+            SoundBGMusic.clip = clip;
+            SoundBGMusic.Pause();
+        }
+        else
+        {
+            Debug.Log("No clip found for Sound Type");
+        }
+    }
+    
+    public void ResumePlayingBGM(Sounds sound)
+    {
+        AudioClip clip = getSoundClip(sound);
+
+        if (clip != null)
+        {
+            SoundBGMusic.clip = clip;
+            SoundBGMusic.UnPause();
+        }
+        else
+        {
+            Debug.Log("No clip found for Sound Type");
+        }
+    }
+    
 
     public void PlayFadeIn(Sounds sound, float speed, float maxVolume)
     {

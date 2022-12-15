@@ -79,11 +79,7 @@ public class PlayerManager : MonoBehaviour
         
     }
 
-    public void Init(int value)
-    {
-        _selectedCharacter = value;
-        UpdateSelected(_selectedCharacter);
-    }
+  
 
     public GameObject SelectWeaponType(int index)
     {
@@ -125,40 +121,6 @@ public class PlayerManager : MonoBehaviour
         return _characters[index].GetComponent<SpriteRenderer>().color;
     }
 
-    public void NextOption()
-    {
-        _selectedCharacter += 1;
-        if (_selectedCharacter == _characters.Count)
-        {
-            _selectedCharacter = 0;
-        }
-
-        UpdateSelected(_selectedCharacter);
-    }
-    
-    public void BackOption()
-    {
-        _selectedCharacter -= 1;
-        if (_selectedCharacter < 0)
-        {
-            _selectedCharacter = _characters.Count-1;
-        }
-
-        UpdateSelected(_selectedCharacter);
-    }
-
-    public void PlayGame()
-    {
-        SceneManager.LoadScene("GameScene");
-        Debug.Log($"Selected before loading: {_selectedCharacter}");
-    }
-    
-    public void QuitGame()
-    {
-        //UIClickSound.Play();
-        Application.Quit();
-    }
-
     public void UpdateSelected(int value)
     {
         _sr = GameObject.Find("SelectedSkin").GetComponent<SpriteRenderer>();
@@ -175,5 +137,13 @@ public class PlayerManager : MonoBehaviour
     {
         return _selectedCharacter;
     }
+    
+    public int GetChartacterCount()
+    {
+        return _characters.Count;
+    }
+    
+    
+    
 
 }

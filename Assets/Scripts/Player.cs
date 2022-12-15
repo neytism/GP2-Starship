@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
                 {
                 
                     //insert death sound here
-                    AudioManager.Instance.StopPlaying(AudioManager.Sounds.GameBGM);
+                    AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.GameBGM);
                     AudioSource.PlayClipAtPoint(_deathSound, gameObject.transform.position);
                     GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
                     Destroy(particle, 3);
