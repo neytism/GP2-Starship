@@ -1081,63 +1081,6 @@ PrefabInstance:
       objectReference: {fileID: 1245975553}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54e2b9823f1e2af488fccef0b2904082, type: 3}
---- !u!1001 &109011986
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3764210238171731729, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_Name
-      value: PlayerManager (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.15427977
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.3507601
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 56.775726
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999694498617681056, guid: e6e9511529858964191bc2853598d94e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e6e9511529858964191bc2853598d94e, type: 3}
 --- !u!1 &120171148
 GameObject:
   m_ObjectHideFlags: 0
@@ -8608,9 +8551,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _CDBar: {fileID: 1649086035}
-  _laserSound: {fileID: 8300000, guid: 35b50866851a8b14592a4484877f2f91, type: 3}
-  _explodeSound: {fileID: 8300000, guid: f6a4b999a952f5042a2f4a6d1bb873e9, type: 3}
-  _swiftSound: {fileID: 8300000, guid: 0d17b7ae7db2ee54886f888224626e3e, type: 3}
   key: 32
 --- !u!82 &1245975561
 AudioSource:
@@ -8622,9 +8562,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 6d1de022a4ae6d24d97c717057dccda5, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 2913b84ccd38e124dbbc3c298c0ee06a, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.614
   m_Pitch: 1
   Loop: 0
   Mute: 0

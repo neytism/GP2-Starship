@@ -10,10 +10,34 @@ public class PlayerManager : MonoBehaviour
 {
     #region Instance
 
-    public static PlayerManager Instance => _instance;
     private static PlayerManager _instance;
+    public static  PlayerManager Instance
+    {
+        get { return _instance; }
+    }
 
     private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(this);
+        }
+        
+        if (SceneManager.GetActiveScene().name.Equals("MainMenu"))
+        {
+            AudioManager.Instance.PlayLoop(AudioManager.Sounds.MainMenuBGM);
+        }else if (SceneManager.GetActiveScene().name.Equals("GameScene"))
+        {
+            AudioManager.Instance.PlayFadeIn(AudioManager.Sounds.GameBGM,0.005f, .5f);
+        }
+    }
+
+    /*private void Awake()
     {
         if (_instance == null)
         {
@@ -25,7 +49,9 @@ public class PlayerManager : MonoBehaviour
         }
         
         DontDestroyOnLoad(this);
-    }
+        
+        
+    }*/
 
     #endregion
     
@@ -36,8 +62,9 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI _characterName;
     private TextMeshProUGUI _characterDescription;
 
-    [HideInInspector] public int selectedCharacter;
-    
+    private static int _selectedCharacter;
+
+
     private GameObject _weaponPrefab1;
     private GameObject _weaponPrefab2;
     private GameObject _weaponPrefab3;
@@ -46,10 +73,16 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private AbilityManager _ability2;
     [SerializeField] private AbilityManager _ability3;
 
+
+    private void Start()
+    {
+        
+    }
+
     public void Init(int value)
     {
-        selectedCharacter = value;
-        UpdateSelected(selectedCharacter);
+        _selectedCharacter = value;
+        UpdateSelected(_selectedCharacter);
     }
 
     public GameObject SelectWeaponType(int index)
@@ -94,30 +127,30 @@ public class PlayerManager : MonoBehaviour
 
     public void NextOption()
     {
-        selectedCharacter += 1;
-        if (selectedCharacter == _characters.Count)
+        _selectedCharacter += 1;
+        if (_selectedCharacter == _characters.Count)
         {
-            selectedCharacter = 0;
+            _selectedCharacter = 0;
         }
 
-        UpdateSelected(selectedCharacter);
+        UpdateSelected(_selectedCharacter);
     }
     
     public void BackOption()
     {
-        selectedCharacter -= 1;
-        if (selectedCharacter < 0)
+        _selectedCharacter -= 1;
+        if (_selectedCharacter < 0)
         {
-            selectedCharacter = _characters.Count-1;
+            _selectedCharacter = _characters.Count-1;
         }
 
-        UpdateSelected(selectedCharacter);
+        UpdateSelected(_selectedCharacter);
     }
 
     public void PlayGame()
     {
-        //PrefabUtility.SaveAsPrefabAsset(gameObject, "Assets/Prefabs/PlayerManager.prefab");
         SceneManager.LoadScene("GameScene");
+        Debug.Log($"Selected before loading: {_selectedCharacter}");
     }
     
     public void QuitGame()
@@ -134,7 +167,13 @@ public class PlayerManager : MonoBehaviour
         _characterDescription = GameObject.Find("Description").GetComponent<TextMeshProUGUI>();
         _characterName.text = _names[value];
         _characterDescription.text = _description[value];
+        _selectedCharacter = value;
         Debug.Log($"Selected: {value}");
     }
-    
+
+    public int GetSelectedCharacter()
+    {
+        return _selectedCharacter;
+    }
+
 }

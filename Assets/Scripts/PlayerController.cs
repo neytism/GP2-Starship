@@ -25,15 +25,14 @@ public class PlayerController : MonoBehaviour
 
     private PlayerManager _playerManager;
 
-    [SerializeField] private AudioSource _shootSound;
-    
-    
+
     public Transform FirePoint => _firePoint;
 
-    private void Awake()
+    private void Start()
     {
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
-        _weapon = _playerManager.SelectWeaponType(_playerManager.selectedCharacter);
+        _weapon = _playerManager.SelectWeaponType(PlayerManager.Instance.GetSelectedCharacter());
+        Debug.Log($"Selected on loading game scene: {PlayerManager.Instance.GetSelectedCharacter()}");
     }
 
     // Update is called once per frame
@@ -51,7 +50,7 @@ public class PlayerController : MonoBehaviour
         //fire
         if (Input.GetMouseButton(0) && Time.time > _nextFire)
         {
-            _shootSound.Play();
+            AudioManager.Instance.PlayOnce(AudioManager.Sounds.PlayerShoot);
             _nextFire = Time.time + _weapon.GetComponent<Weapon>().FireRate;
             _weapon.GetComponent<Weapon>().FireWeapon();
         }

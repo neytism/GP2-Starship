@@ -30,9 +30,6 @@ public class AbilityHolder : MonoBehaviour
     private float _cooldown;
     private bool _isCoolDown;
 
-    [SerializeField] public AudioClip _laserSound;
-    [SerializeField] public AudioClip _explodeSound;
-    [SerializeField] public AudioClip _swiftSound;
     
     AbilityState state = AbilityState.ready;
 
@@ -54,7 +51,7 @@ public class AbilityHolder : MonoBehaviour
     private void Awake()
     {
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
-        _ability = _playerManager.SelectAbilityType(_playerManager.selectedCharacter);
+        _ability = _playerManager.SelectAbilityType(PlayerManager.Instance.GetSelectedCharacter());
         _duration = _ability.ActiveTime;
         _cooldown = _ability.Cooldown;
         _CDBar.fillAmount = 1;

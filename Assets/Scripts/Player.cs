@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     
     [SerializeField] private TextMeshProUGUI _killCountText;
 
+    private int _selectedCharacter;
+
     
 
     private PlayerManager _playerManager;
@@ -57,7 +59,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
-        _color = _playerManager.SelectCharacterSprite(_playerManager.selectedCharacter);
+        _color = _playerManager.SelectCharacterSprite(PlayerManager.Instance.GetSelectedCharacter());
         gameObject.GetComponent<SpriteRenderer>().color = _color;
         _currentHealth = _maxHealth;
         HPBarUpdate();
@@ -77,6 +79,7 @@ public class Player : MonoBehaviour
                 {
                 
                     //insert death sound here
+                    AudioManager.Instance.StopPlaying(AudioManager.Sounds.GameBGM);
                     AudioSource.PlayClipAtPoint(_deathSound, gameObject.transform.position);
                     GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
                     Destroy(particle, 3);

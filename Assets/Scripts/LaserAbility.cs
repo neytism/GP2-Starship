@@ -16,7 +16,8 @@ public class LaserAbility : AbilityManager
     {
         AbilityHolder player = parent.GetComponent<AbilityHolder>();
 
-        AudioSource.PlayClipAtPoint(player._laserSound, player.transform.position);
+        AudioManager.Instance.PlayOnce(AudioManager.Sounds.LaserSound);
+        
         player.TurnOnLaser();
         Debug.Log("Laser ABILITY ");
     }

@@ -56,8 +56,7 @@ MonoBehaviour:
   - Rapid Firing and Dashing
   - Spread Bullets and Laser
   - Explosive bullets and EMP AOE
-  _sr: {fileID: 0}
-  selectedCharacter: 2
+  _sr: {fileID: 6970758925789662351, guid: 9832190355c725044b04872af9cd8103, type: 3}
   _ability1: {fileID: 11400000, guid: b54f9c0da85f0ff45b6d3a2caf0401df, type: 2}
   _ability2: {fileID: 11400000, guid: 570ab41c29e6ff942bd112a73dec46ab, type: 2}
   _ability3: {fileID: 11400000, guid: 380180260a476804baccf7da5e179cd9, type: 2}

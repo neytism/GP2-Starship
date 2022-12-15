@@ -18,7 +18,6 @@ public class SwiftAbility : AbilityManager
 // Swift ability is the Projectile Class
 {
     [SerializeField] private float DashVelocity ;
-    [SerializeField] private AudioClip _swiftSound ;
 
     public override void Activate(GameObject parent)
     {
@@ -27,7 +26,7 @@ public class SwiftAbility : AbilityManager
         AbilityHolder player = parent.GetComponent<AbilityHolder>();
         Rigidbody2D rb = parent.GetComponent<Rigidbody2D>();
         
-        AudioSource.PlayClipAtPoint(player._swiftSound, player.transform.position);
+        AudioManager.Instance.PlayOnce(AudioManager.Sounds.SwiftSound);
         
         player.IsCoolDown = true;
         player.BeInvincible();

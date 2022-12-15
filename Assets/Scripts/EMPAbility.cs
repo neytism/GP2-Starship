@@ -10,7 +10,7 @@ public class EMPAbility : AbilityManager
     {
         AbilityHolder player = parent.GetComponent<AbilityHolder>();
 
-        AudioSource.PlayClipAtPoint(player._explodeSound, player.transform.position);
+        AudioManager.Instance.PlayOnce(AudioManager.Sounds.EMPsound);
         
         player.Explode();
         Debug.Log("EMP ABILITY ");
