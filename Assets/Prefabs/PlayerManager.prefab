@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3764210238171731729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6999694498617681056}
+  - component: {fileID: 1742307865}
+  m_Layer: 0
+  m_Name: PlayerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6999694498617681056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3764210238171731729}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.15427977, y: -0.3507601, z: 56.775726}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1742307865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3764210238171731729}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 175b2ac2be5a0c34b8068fc225d95c8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characters:
+  - {fileID: 4089500893719478394, guid: fe795b637e9f7c140a9e10d03241904f, type: 3}
+  - {fileID: 210209229239938007, guid: a2f8762bc66f3d947b80eb4e78a0a10c, type: 3}
+  - {fileID: 6295234907814020102, guid: 3b9c48b9718c70a4f93a5e119574cdfd, type: 3}
+  _names:
+  - Swift Ship
+  - Spread Ship
+  - AOE Ship
+  _description:
+  - Rapid Firing and Dashing
+  - Spread Bullets and Laser
+  - Explosive bullets and EMP AOE
+  _sr: {fileID: 0}
+  selectedCharacter: 2
+  _ability1: {fileID: 11400000, guid: b54f9c0da85f0ff45b6d3a2caf0401df, type: 2}
+  _ability2: {fileID: 11400000, guid: 570ab41c29e6ff942bd112a73dec46ab, type: 2}
+  _ability3: {fileID: 11400000, guid: 380180260a476804baccf7da5e179cd9, type: 2}

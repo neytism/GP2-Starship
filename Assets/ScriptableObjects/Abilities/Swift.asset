@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f22ab0e666f12448b9a440145a3aa7, type: 3}
+  m_Name: Swift
+  m_EditorClassIdentifier: 
+  Name: Swift
+  Cooldown: 3
+  ActiveTime: 0.6
+  DashVelocity: 50
+  _swiftSound: {fileID: 8300000, guid: 0d17b7ae7db2ee54886f888224626e3e, type: 3}
