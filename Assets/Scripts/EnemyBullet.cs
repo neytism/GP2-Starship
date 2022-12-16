@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,9 +6,15 @@ using UnityEngine;
 public class EnemyBullet : MonoBehaviour
 {
     public GameObject smallDiePEffect;
+
+    private void OnEnable()
+    {
+        StartCoroutine(BulletLife(gameObject));
+    }
+
     private void OnCollisionEnter2D(Collision2D col) 
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -21,9 +28,16 @@ public class EnemyBullet : MonoBehaviour
         }
         else if (col.gameObject.tag.Equals("Bullet"))
         {
+            AudioManager.Instance.PlayOnce(AudioManager.Sounds.MiniExplosion);
             GameObject particle = Instantiate(smallDiePEffect, transform.position, Quaternion.identity);
             Destroy(particle, 1);
         }
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+    }
+    
+    IEnumerator BulletLife(GameObject bullet)
+    {
+        yield return new WaitForSeconds(5);
+        bullet.SetActive(false);
     }
 }

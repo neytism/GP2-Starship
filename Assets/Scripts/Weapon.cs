@@ -63,7 +63,6 @@ public class Weapon : MonoBehaviour
                         bullet.GetComponent<Rigidbody2D>().AddForce(RotateTowardsUp(_player.FirePoint.up, 20) * _fireForce,ForceMode2D.Impulse);
                         break;
                 }
-                StartCoroutine(BulletLife(bullet));
             }
         } else 
         {
@@ -72,7 +71,6 @@ public class Weapon : MonoBehaviour
             bullet.SetActive(true);
             //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
             bullet.GetComponent<Rigidbody2D>().AddForce(_player.FirePoint.up * _fireForce,ForceMode2D.Impulse);
-            StartCoroutine(BulletLife(bullet));
             
         }
         
@@ -92,9 +90,5 @@ public class Weapon : MonoBehaviour
     }
     
 
-    IEnumerator BulletLife(GameObject bullet)
-    {
-        yield return new WaitForSeconds(3);
-        bullet.SetActive(false);
-    }
+    
 }

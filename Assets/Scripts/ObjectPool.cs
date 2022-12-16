@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
 
 //
@@ -13,7 +14,7 @@ public class ObjectPool : MonoBehaviour
 {
 
     private GameObject _objectToPool;
-    private bool _notEnoughBulletsInPool = true;
+    private bool _notEnoughObjectsInPool = true;
 
     private List<GameObject> _objectsPool;
     public Transform spawnedObjectsParent;
@@ -37,7 +38,7 @@ public class ObjectPool : MonoBehaviour
             }
         }
 
-        if (_notEnoughBulletsInPool)
+        if (_notEnoughObjectsInPool)
         {
             CreateObjectParentIfNeeded();
             
@@ -51,6 +52,37 @@ public class ObjectPool : MonoBehaviour
 
         return null;
     }
+    
+    public GameObject GetObject(Vector3 pos)
+    {
+        if (_objectsPool.Count > 0)
+        {
+            for (int i = 0; i < _objectsPool.Count; i++)
+            {
+                if (!_objectsPool[i].activeInHierarchy)
+                {
+                    _objectsPool[i].transform.position = pos;
+                    return _objectsPool[i];
+                }
+            }
+        }
+
+        if (_notEnoughObjectsInPool)
+        {
+            CreateObjectParentIfNeeded();
+            
+            GameObject obj = Instantiate(_objectToPool, pos, Quaternion.identity);
+            obj.name = transform.root.name + "_" + _objectToPool.name + "_" + _objectsPool.Count;
+            obj.transform.SetParent(spawnedObjectsParent);
+            obj.SetActive(false);
+            _objectsPool.Add(obj);
+            return obj;
+        }
+
+        return null;
+    }
+
+    
 
     public void Initialize(GameObject objectToPool)
     {

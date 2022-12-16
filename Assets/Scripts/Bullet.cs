@@ -10,6 +10,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+   private void OnEnable()
+   {
+      StartCoroutine(BulletLife(gameObject));
+   }
 
    private void OnCollisionEnter2D(Collision2D col) 
    {
@@ -19,5 +23,11 @@ public class Bullet : MonoBehaviour
    private void OnTriggerEnter2D(Collider2D col)
    {
       gameObject.SetActive(false);
+   }
+   
+   IEnumerator BulletLife(GameObject bullet)
+   {
+      yield return new WaitForSeconds(3);
+      bullet.SetActive(false);
    }
 }

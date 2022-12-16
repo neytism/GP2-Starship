@@ -17,9 +17,17 @@ public class EnemySpawner : MonoBehaviour
     private float _minTimeInterval = 0.20f;
     private int _counter = 0;
     private int _timePerRound = 30;
-    
 
-    public GameObject[] enemies;
+    private ObjectPool _enemyPool;
+
+    //public GameObject[] enemies;  CAN BE USED FOR MULTIPLE ENEMIES
+    [SerializeField] private GameObject _enemyPrefab;
+
+    private void Awake()
+    {
+        _enemyPool = GetComponent<ObjectPool>();
+        _enemyPool.Initialize(_enemyPrefab);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -32,8 +40,11 @@ public class EnemySpawner : MonoBehaviour
     {
         Vector2 spawnPos = FindObjectOfType<Player>().transform.position;
         spawnPos += Random.insideUnitCircle.normalized * _spawnRadius;
+        
+        //Instantiate(_enemyPrefab,spawnPos, Quaternion.identity);
 
-        Instantiate(enemies[Random.Range(0, enemies.Length)], spawnPos, Quaternion.identity);
+        GameObject enemy = _enemyPool.GetObject(spawnPos);
+        enemy.SetActive(true);
         yield return new WaitForSeconds(_timeInterval);
         StartCoroutine(SpawnEnemy());  //loops
     }

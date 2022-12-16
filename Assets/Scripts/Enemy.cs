@@ -19,12 +19,17 @@ public class Enemy : MonoBehaviour
     private float timeBtwShot;
     [SerializeField] private float startTimeBtwShots;
 
+    private ObjectPool _enemyBulletPool;
+    
     
     [SerializeField] private bool _canFire = true;
     
     
+    
     private void Awake()
     {
+        _enemyBulletPool = gameObject.AddComponent<ObjectPool>();
+        _enemyBulletPool.Initialize(_enemyBullet);
         _player = GameObject.FindObjectOfType<Player>();
         timeBtwShot = startTimeBtwShots;
     }
@@ -55,7 +60,7 @@ public class Enemy : MonoBehaviour
             }
             
             _player.AddKillCount();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -63,10 +68,11 @@ public class Enemy : MonoBehaviour
     {
         if (timeBtwShot <= 0)
         {
-            GameObject bullet = Instantiate(_enemyBullet, _enemyFirePoint.position, Quaternion.identity);
+            //GameObject bullet = Instantiate(_enemyBullet, _enemyFirePoint.position, Quaternion.identity);
+            GameObject bullet = _enemyBulletPool.GetObject();
+            bullet.SetActive(true);
             bullet.GetComponent<Rigidbody2D>().AddForce(_enemyFirePoint.up * _enemyFireForce,ForceMode2D.Impulse);
             timeBtwShot = startTimeBtwShots;
-            StartCoroutine(BulletLife(bullet));
         }
         else
         {
@@ -75,9 +81,5 @@ public class Enemy : MonoBehaviour
     }
     
     
-    IEnumerator BulletLife(GameObject bullet)
-    {
-        yield return new WaitForSeconds(3);
-        Destroy(bullet);
-    }
+    
 }

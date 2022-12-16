@@ -55,7 +55,6 @@ public class AbilityHolder : MonoBehaviour
 
     private void Awake()
     {
-        _playerManager = GameObject.FindObjectOfType<PlayerManager>();
         _ability = SelectAbilityType(PlayerManager.Instance.GetSelectedCharacter());
         _duration = _ability.ActiveTime;
         _cooldown = _ability.Cooldown;
