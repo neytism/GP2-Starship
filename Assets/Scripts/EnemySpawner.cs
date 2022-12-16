@@ -25,25 +25,27 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        _enemyPool = GetComponent<ObjectPool>();
+        _enemyPool = gameObject.AddComponent<ObjectPool>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnEnemy());
+        StartCoroutine(DelayBeforeSpawning());
         StartCoroutine(RoundCounter());  //can be commented
     }
 
     IEnumerator SpawnEnemy()  //spawns enemy based on radius around player
     {
+        
         Vector2 spawnPos = FindObjectOfType<Player>().transform.position;
         spawnPos += Random.insideUnitCircle.normalized * _spawnRadius;
         
         //Instantiate(_enemyPrefab,spawnPos, Quaternion.identity);
-
+       
         GameObject enemy = _enemyPool.GetObject(_enemyPrefab,spawnPos);
         enemy.SetActive(true);
+        
         yield return new WaitForSeconds(_timeInterval);
         StartCoroutine(SpawnEnemy());  //loops
     }
@@ -60,5 +62,11 @@ public class EnemySpawner : MonoBehaviour
         }
         yield return new WaitForSeconds(_timePerRound);
         StartCoroutine(RoundCounter()); 
+    }
+
+    IEnumerator DelayBeforeSpawning()
+    {
+        yield return new WaitForSeconds(5);
+        StartCoroutine(SpawnEnemy());
     }
 }

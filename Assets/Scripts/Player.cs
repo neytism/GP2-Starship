@@ -17,6 +17,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float _maxHealth = 10;
     [SerializeField] private float _currentHealth;
     [SerializeField] private int _killCount;
+
+    [SerializeField] private Vector3 _startingPos = new Vector3(0,0,0);
+    private Vector3 _currentPos;
     
     [SerializeField] private TextMeshProUGUI _killCountText;
 
@@ -55,14 +58,21 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip _deathSound;
     [SerializeField] private AudioClip _gameOver;
 
-    
+    private void Update()
+    {
+        _currentPos = transform.position;
+    }
+
     private void Awake()
     {
         AudioManager.Instance.PlayFadeIn(AudioManager.Sounds.GameBGM,0.005f, .5f);
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
         _color = _playerManager.SelectCharacterSprite(PlayerManager.Instance.GetSelectedCharacter());
         gameObject.GetComponent<SpriteRenderer>().color = _color;
-        _currentHealth = _maxHealth;
+        _currentHealth = PlayerManager.Instance.Health;
+        _killCount = PlayerManager.Instance.Kills;
+        transform.position = PlayerManager.Instance.Position;
+        UpdateTextKillCount();
         HPBarUpdate();
     }
     
@@ -92,6 +102,7 @@ public class Player : MonoBehaviour
                 }
             }
             Debug.Log("Player Damaged");
+            
             HPBarUpdate();
         }
 
@@ -100,6 +111,7 @@ public class Player : MonoBehaviour
     private void HPBarUpdate() //updates health bar using image fill
     {
         HPBar.fillAmount =  _currentHealth/ _maxHealth;
+        PlayerManager.Instance.Health = (int)_currentHealth;
     }
     
     IEnumerator ShowGameOverScreen() {
@@ -114,13 +126,19 @@ public class Player : MonoBehaviour
     {
         _killCount++;
         UpdateTextKillCount();
+        PlayerManager.Instance.Kills = _killCount;
     }
 
     private void UpdateTextKillCount()
     {
         _killCountText.text = _killCount.ToString();
     }
+    
 
+    private void OnApplicationQuit()
+    {
+        PlayerManager.Instance.Position = _currentPos;
+    }
 
 
 }

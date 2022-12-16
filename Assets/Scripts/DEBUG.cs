@@ -9,6 +9,6 @@ public class DEBUG : MonoBehaviour
 
     private void Awake()
     {
-       PlayerManager.Instance.SetSelected(_int);
+       //PlayerManager.Instance.SetSelected(_int);
     }
 }

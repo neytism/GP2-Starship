@@ -58,7 +58,7 @@ public class ObjectPool : MonoBehaviour
     public GameObject GetObject(GameObject objectToPool, Vector3 pos)
     {
         _objectToPool = objectToPool;
-        
+
         if (_objectsPool.Count > 0)
         {
             for (int i = 0; i < _objectsPool.Count; i++)
@@ -71,6 +71,7 @@ public class ObjectPool : MonoBehaviour
             }
         }
 
+        
         if (_notEnoughObjectsInPool)
         {
             CreateObjectParentIfNeeded();
