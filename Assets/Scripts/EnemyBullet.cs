@@ -6,6 +6,12 @@ using UnityEngine;
 public class EnemyBullet : MonoBehaviour
 {
     public GameObject smallDiePEffect;
+    private ObjectPool _particlePool;
+
+    private void Awake()
+    {
+        _particlePool = gameObject.AddComponent<ObjectPool>();
+    }
 
     private void OnEnable()
     {
@@ -22,15 +28,17 @@ public class EnemyBullet : MonoBehaviour
         
         Player _player = GameObject.FindObjectOfType<Player>();
         if (col.gameObject.tag.Equals("Player")) {
-            GameObject particle = Instantiate(smallDiePEffect, transform.position, Quaternion.identity);
-            Destroy(particle, 3);
+            //GameObject particle = Instantiate(smallDiePEffect, transform.position, Quaternion.identity);
+            //Destroy(particle, 3);
+            GameObject particle = _particlePool.GetObject(smallDiePEffect);
+            particle.SetActive(true);
             _player.ReduceHealth(1);
         }
         else if (col.gameObject.tag.Equals("Bullet"))
         {
             AudioManager.Instance.PlayOnce(AudioManager.Sounds.MiniExplosion);
-            GameObject particle = Instantiate(smallDiePEffect, transform.position, Quaternion.identity);
-            Destroy(particle, 1);
+            GameObject particle = _particlePool.GetObject(smallDiePEffect);
+            particle.SetActive(true);
         }
         gameObject.SetActive(false);
     }
@@ -38,6 +46,8 @@ public class EnemyBullet : MonoBehaviour
     IEnumerator BulletLife(GameObject bullet)
     {
         yield return new WaitForSeconds(5);
+        GameObject particle = _particlePool.GetObject(smallDiePEffect);
+        particle.SetActive(true);
         bullet.SetActive(false);
     }
 }

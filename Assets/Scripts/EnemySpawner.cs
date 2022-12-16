@@ -26,7 +26,6 @@ public class EnemySpawner : MonoBehaviour
     private void Awake()
     {
         _enemyPool = GetComponent<ObjectPool>();
-        _enemyPool.Initialize(_enemyPrefab);
     }
 
     // Start is called before the first frame update
@@ -43,7 +42,7 @@ public class EnemySpawner : MonoBehaviour
         
         //Instantiate(_enemyPrefab,spawnPos, Quaternion.identity);
 
-        GameObject enemy = _enemyPool.GetObject(spawnPos);
+        GameObject enemy = _enemyPool.GetObject(_enemyPrefab,spawnPos);
         enemy.SetActive(true);
         yield return new WaitForSeconds(_timeInterval);
         StartCoroutine(SpawnEnemy());  //loops

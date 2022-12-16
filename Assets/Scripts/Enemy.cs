@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float startTimeBtwShots;
 
     private ObjectPool _enemyBulletPool;
+    private ObjectPool _particlePool;
     
     
     [SerializeField] private bool _canFire = true;
@@ -29,7 +30,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _enemyBulletPool = gameObject.AddComponent<ObjectPool>();
-        _enemyBulletPool.Initialize(_enemyBullet);
+        _particlePool = gameObject.AddComponent<ObjectPool>();
         _player = GameObject.FindObjectOfType<Player>();
         timeBtwShot = startTimeBtwShots;
     }
@@ -51,8 +52,9 @@ public class Enemy : MonoBehaviour
             //deploys particle before destroying object
             //particle system can be converted to pooling system if time possible
             AudioManager.Instance.PlayOnce(AudioManager.Sounds.EnemyDeath);
-            GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
-            Destroy(particle, 3);
+            GameObject particle = _particlePool.GetObject(diePEffect);
+            particle.SetActive(true);
+            //GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
             
 
             if (col.gameObject.tag.Equals("Player")) {
@@ -69,7 +71,7 @@ public class Enemy : MonoBehaviour
         if (timeBtwShot <= 0)
         {
             //GameObject bullet = Instantiate(_enemyBullet, _enemyFirePoint.position, Quaternion.identity);
-            GameObject bullet = _enemyBulletPool.GetObject();
+            GameObject bullet = _enemyBulletPool.GetObject(_enemyBullet);
             bullet.SetActive(true);
             bullet.GetComponent<Rigidbody2D>().AddForce(_enemyFirePoint.up * _enemyFireForce,ForceMode2D.Impulse);
             timeBtwShot = startTimeBtwShots;
@@ -79,7 +81,5 @@ public class Enemy : MonoBehaviour
             timeBtwShot -= Time.deltaTime;
         }
     }
-    
-    
-    
+
 }

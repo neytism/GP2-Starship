@@ -30,7 +30,6 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
-        _bulletPool.Initialize(_bulletPrefab);
     }
 
     public void FireWeapon()
@@ -42,7 +41,7 @@ public class Weapon : MonoBehaviour
             {
 
                 //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
-                GameObject bullet = _bulletPool.GetObject();
+                GameObject bullet = _bulletPool.GetObject(_bulletPrefab);
                 bullet.SetActive(true);
                 
                 switch (i)
@@ -67,7 +66,7 @@ public class Weapon : MonoBehaviour
         } else 
         {
             //get object from object pool instead of instantiating directly
-            GameObject bullet = _bulletPool.GetObject();
+            GameObject bullet = _bulletPool.GetObject(_bulletPrefab);
             bullet.SetActive(true);
             //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
             bullet.GetComponent<Rigidbody2D>().AddForce(_player.FirePoint.up * _fireForce,ForceMode2D.Impulse);

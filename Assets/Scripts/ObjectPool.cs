@@ -24,8 +24,10 @@ public class ObjectPool : MonoBehaviour
         _objectsPool = new List<GameObject>();
     }
 
-    public GameObject GetObject()
+    public GameObject GetObject(GameObject objectToPool)
     {
+        _objectToPool = objectToPool;
+        
         if (_objectsPool.Count > 0)
         {
             for (int i = 0; i < _objectsPool.Count; i++)
@@ -53,8 +55,10 @@ public class ObjectPool : MonoBehaviour
         return null;
     }
     
-    public GameObject GetObject(Vector3 pos)
+    public GameObject GetObject(GameObject objectToPool, Vector3 pos)
     {
+        _objectToPool = objectToPool;
+        
         if (_objectsPool.Count > 0)
         {
             for (int i = 0; i < _objectsPool.Count; i++)
@@ -82,13 +86,6 @@ public class ObjectPool : MonoBehaviour
         return null;
     }
 
-    
-
-    public void Initialize(GameObject objectToPool)
-    {
-        this._objectToPool = objectToPool;
-    }
-    
     private void CreateObjectParentIfNeeded()
     {
         if (spawnedObjectsParent == null)
@@ -104,5 +101,6 @@ public class ObjectPool : MonoBehaviour
 
         }
     }
+
 
 }

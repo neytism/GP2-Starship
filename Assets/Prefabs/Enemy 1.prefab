@@ -169,7 +169,7 @@ MonoBehaviour:
   _enemyFirePoint: {fileID: 2869112521925126163}
   _enemyFireForce: 8
   startTimeBtwShots: 3
-  _hitSound: {fileID: 8300000, guid: 765830ef3edc7974d9609fe6f3316c02, type: 3}
+  _canFire: 1
 --- !u!1 &8170933099182647373
 GameObject:
   m_ObjectHideFlags: 0
