@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D _rb;
     public Vector2 _moveDirection;
     
+    
     //for aiming
     private Vector2 _mousePosition; 
     
@@ -28,8 +29,14 @@ public class PlayerController : MonoBehaviour
 
     public Transform FirePoint => _firePoint;
 
+    private void Awake()
+    {
+        
+    }
+
     private void Start()
     {
+        transform.position = PlayerManager.Instance.Position;
         WeaponHolder _weaponHolder = GetComponent<WeaponHolder>();
         _weapon = _weaponHolder.SelectWeaponType(PlayerManager.Instance.GetSelectedCharacter());
         Debug.Log($"Selected on loading game scene: {PlayerManager.Instance.GetSelectedCharacter()}");
@@ -38,7 +45,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _firePoint = _weapon.GetComponent<Transform>();
+        _firePoint = _weapon.GetComponent<Transform>(); 
+       
         
         //movement
         float moveX = Input.GetAxisRaw("Horizontal");
@@ -68,8 +76,6 @@ public class PlayerController : MonoBehaviour
         float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg - 90f;  //faces towards target
         _rb.rotation = aimAngle;
     }
-
-    
 
     
 }

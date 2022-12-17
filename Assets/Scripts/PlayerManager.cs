@@ -28,11 +28,14 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(this);
         }
+        
+        LoadData();
+        
     }
 
     #endregion
 
-    [SerializeField] private PlayerData _playerData;
+    [SerializeField] private PlayerData _newPlayerData;
     [SerializeField] private PlayerData _localPlayerData;
 
     private const string SAVE_DATA_KEY = "PlayerData";
@@ -44,17 +47,11 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI _characterName;
     private TextMeshProUGUI _characterDescription;
 
+    private static bool _isNewGame;
     private static int _health = 10;
     private static int _kills;
-    private static int _selectedCharacter;
     private static Vector3 _position;
-
-    
-
-    private void Start()
-    {
-        LoadData();
-    }
+    private static int _selectedCharacter;
 
     public Color SelectCharacterSprite(int index)
     {
@@ -82,7 +79,12 @@ public class PlayerManager : MonoBehaviour
     {
         return _characters.Count;
     }
-    
+    public bool IsNewGame
+    {
+        get => _isNewGame;
+        set => _isNewGame = value;
+
+    }
     public int Health
     {
         get => _health;
@@ -110,22 +112,38 @@ public class PlayerManager : MonoBehaviour
 
     public void NewGame()
     {
-        this._playerData = new PlayerData();
-        _health = 10;
+        NewData();
         SceneManager.LoadScene("GameScene");
         AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.MainMenuBGM);
     }
 
+    public void NewData()
+    {
+        _newPlayerData = new PlayerData();
+        var data = JsonConvert.SerializeObject(_newPlayerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+        PlayerPrefs.SetString(SAVE_DATA_KEY, data);
+        Debug.Log($"{nameof(PlayerManager)}.{nameof(NewGame)} : {data}");
+        
+        //loading data for new game
+        _isNewGame = _newPlayerData.IsNewGame;
+        _health = _newPlayerData.Health;
+        _kills = _newPlayerData.Kills;
+        _position = _newPlayerData.Position;
+    }
+
     public void LoadData()
     {
+        Debug.Log("Checking if data available");
         if (PlayerPrefs.HasKey(SAVE_DATA_KEY))
         {
+            Debug.Log("Has data to load");
             var jsonToConvert = PlayerPrefs.GetString(SAVE_DATA_KEY);
             Debug.Log($"{nameof(PlayerManager)}.{nameof(LoadGame)} : {jsonToConvert}");
-            _localPlayerData = JsonConvert.DeserializeObject<PlayerData>(jsonToConvert);
+            _localPlayerData = JsonConvert.DeserializeObject<PlayerData>(jsonToConvert, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
             
             // Setting up data when loading
-            
+
+            _isNewGame = _localPlayerData.IsNewGame;
             _selectedCharacter = _localPlayerData.SelectedCharacter;
             _kills = _localPlayerData.Kills;
             _health = _localPlayerData.Health;
@@ -133,10 +151,17 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            var playerData = new PlayerData();
-            _localPlayerData = playerData;
-            var data = JsonConvert.SerializeObject(playerData);
+            Debug.Log("No available data to load, new game only");
+            
+            _newPlayerData = new PlayerData();
+            var data = JsonConvert.SerializeObject(_newPlayerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
             PlayerPrefs.SetString(SAVE_DATA_KEY, data);
+        
+            //loading data for new game
+            _isNewGame = _newPlayerData.IsNewGame;
+            _health = _newPlayerData.Health;
+            _kills = _newPlayerData.Kills;
+            _position = _newPlayerData.Position;
         } 
     }
     public void LoadGame()
@@ -149,13 +174,10 @@ public class PlayerManager : MonoBehaviour
     public void SaveGame()
     {
         //save date
-        _playerData.SelectedCharacter = _selectedCharacter;
-        _playerData.Kills = _kills;
-        _playerData.Health = _health;
-        Debug.Log($"{_position}");
-        _playerData.Position = new Vector3(_position.x, _position.y);
-
-        var playerData = JsonConvert.SerializeObject(_playerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+        Debug.Log($"Position on Save {_position}");
+        _localPlayerData = new PlayerData(false, _health, _kills, _position, _selectedCharacter);
+        
+        var playerData = JsonConvert.SerializeObject(_localPlayerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
         Debug.Log($"{nameof(PlayerManager)}.{nameof(SaveGame)} : {playerData}");
         PlayerPrefs.SetString(SAVE_DATA_KEY, playerData);
     }
@@ -164,4 +186,6 @@ public class PlayerManager : MonoBehaviour
     {
         SaveGame();
     }
+
+    
 }

@@ -35,11 +35,12 @@ public class EnemyBullet : MonoBehaviour
         }
         else if (col.gameObject.tag.Equals("Bullet") || col.gameObject.tag.Equals("ExplosionRadius"))
         {
-            AudioManager.Instance.PlayOnce(AudioManager.Sounds.MiniExplosion);
+            
             //GameObject particle = _particlePool.GetObject(smallDiePEffect, transform.position);
             GameObject particle = ObjectPool.Instance.GetObject(smallDiePEffect, transform.position);
             particle.SetActive(true);
         }
+        AudioManager.Instance.PlayOnce(AudioManager.Sounds.MiniExplosion);
         gameObject.SetActive(false);
     }
     

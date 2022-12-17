@@ -6,7 +6,6 @@ using UnityEngine;
 public class ExplodingBullet : MonoBehaviour
 {
     [SerializeField] private GameObject _explosionRadius;
-    [SerializeField] private AudioClip _explodeSound;
 
     private void Awake()
     {
@@ -19,7 +18,7 @@ public class ExplodingBullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        AudioSource.PlayClipAtPoint(_explodeSound, gameObject.transform.position);
+        AudioManager.Instance.PlayOnce(AudioManager.Sounds.EMPsound);
         if (col.gameObject.tag.Equals("Enemy"))
         {
             //GameObject circle = Instantiate(_explosionRadius, transform.position, Quaternion.identity);

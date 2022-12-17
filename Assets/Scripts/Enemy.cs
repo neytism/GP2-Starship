@@ -11,7 +11,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private Player _player;
-    [SerializeField] private float _damage = 1;
+    [SerializeField] private int _damage = 1;
     public GameObject diePEffect;
     [SerializeField] private GameObject _enemyBullet;
     [SerializeField] private Transform _enemyFirePoint;

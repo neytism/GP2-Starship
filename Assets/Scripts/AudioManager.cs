@@ -165,6 +165,7 @@ public class AudioManager : MonoBehaviour
         LaserSound,
         EMPsound,
         SwiftSound,
-        MiniExplosion
+        MiniExplosion,
+        GameOver
     }
 }

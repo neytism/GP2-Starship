@@ -15,17 +15,13 @@ public class Player : MonoBehaviour
     [SerializeField] public GameObject gameOverScreen;
     
     [SerializeField] private float _maxHealth = 10;
-    [SerializeField] private float _currentHealth;
-    [SerializeField] private int _killCount;
-
-    [SerializeField] private Vector3 _startingPos = new Vector3(0,0,0);
-    private Vector3 _currentPos;
+    private static int _currentHealth;
+    private static int _killCount;
+    private static Vector3 _currentPos;
     
     [SerializeField] private TextMeshProUGUI _killCountText;
 
     private int _selectedCharacter;
-
-    
 
     private PlayerManager _playerManager;
 
@@ -55,9 +51,6 @@ public class Player : MonoBehaviour
 
     public GameObject diePEffect;
 
-    [SerializeField] private AudioClip _deathSound;
-    [SerializeField] private AudioClip _gameOver;
-
     private void Update()
     {
         _currentPos = transform.position;
@@ -69,14 +62,15 @@ public class Player : MonoBehaviour
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
         _color = _playerManager.SelectCharacterSprite(PlayerManager.Instance.GetSelectedCharacter());
         gameObject.GetComponent<SpriteRenderer>().color = _color;
+        
         _currentHealth = PlayerManager.Instance.Health;
         _killCount = PlayerManager.Instance.Kills;
-        transform.position = PlayerManager.Instance.Position;
+        
         UpdateTextKillCount();
         HPBarUpdate();
     }
     
-    public void ReduceHealth(float value)
+    public void ReduceHealth(int value)
     {
         if (!_isInvincible)
         {
@@ -91,7 +85,7 @@ public class Player : MonoBehaviour
                 
                     //insert death sound here
                     AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.GameBGM);
-                    AudioSource.PlayClipAtPoint(_deathSound, gameObject.transform.position);
+                    AudioManager.Instance.PlayOnce(AudioManager.Sounds.PlayerDeath);
                     //did not put pooling because this only happens when dead 
                     GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
                     Destroy(particle, 3);
@@ -111,12 +105,11 @@ public class Player : MonoBehaviour
     private void HPBarUpdate() //updates health bar using image fill
     {
         HPBar.fillAmount =  _currentHealth/ _maxHealth;
-        PlayerManager.Instance.Health = (int)_currentHealth;
     }
     
     IEnumerator ShowGameOverScreen() {
         yield return new WaitForSeconds(1.5f);
-        AudioSource.PlayClipAtPoint(_gameOver, gameObject.transform.position);
+        AudioManager.Instance.PlayOnce(AudioManager.Sounds.GameOver);
         gameOverScreen.SetActive(true);
         
         Time.timeScale = 0f;
@@ -126,19 +119,23 @@ public class Player : MonoBehaviour
     {
         _killCount++;
         UpdateTextKillCount();
-        PlayerManager.Instance.Kills = _killCount;
     }
 
     private void UpdateTextKillCount()
     {
         _killCountText.text = _killCount.ToString();
     }
-    
+
+    public static void UpdateStats()
+    {
+        PlayerManager.Instance.Position = _currentPos;
+        PlayerManager.Instance.Health = _currentHealth;
+        PlayerManager.Instance.Kills = _killCount;
+    }
 
     private void OnApplicationQuit()
     {
-        PlayerManager.Instance.Position = _currentPos;
+        UpdateStats();
     }
-
 
 }

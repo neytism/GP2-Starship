@@ -9,21 +9,23 @@ public class PlayerData
     public int Health;
     public int Kills;
     public Vector3 Position;
-    //public Quaternion Rotation;
     public int SelectedCharacter;
     
-    public PlayerData(int health, int kills, int selectedCharacter)
+    public PlayerData(bool isNewGame,int health, int kills, Vector3 position, int selectedCharacter)
     {
+        this.IsNewGame = isNewGame;
         this.Health = health;
         this.Kills = kills;
+        this.Position = position;
         this.SelectedCharacter = selectedCharacter;
     }
 
     public PlayerData()
     {
+        IsNewGame = true;
         Health = 10;
         Kills = 0;
-        Position = new Vector3(0,0,0);
+        Position = Vector3.zero;
         SelectedCharacter = 0;
     }
     

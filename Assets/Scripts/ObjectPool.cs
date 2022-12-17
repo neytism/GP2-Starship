@@ -39,7 +39,7 @@ public class ObjectPool : MonoBehaviour
     private GameObject _objectToPool;
     private bool _notEnoughObjectsInPool = true;
 
-    private List<GameObject> _objectsPool;
+    public List<GameObject> _objectsPool;
     public Transform spawnedObjectsParent;
 
     private void Start()
@@ -84,7 +84,7 @@ public class ObjectPool : MonoBehaviour
     {
         if (spawnedObjectsParent == null)
         {
-            string name = "ObjectPool_" + _objectToPool.name;
+            string name = "Object Pool Holder";
             var parentObject = GameObject.Find(name);
             if (parentObject != null)
                 spawnedObjectsParent = parentObject.transform;
@@ -93,6 +93,14 @@ public class ObjectPool : MonoBehaviour
                 spawnedObjectsParent = new GameObject(name).transform;
             }
 
+        }
+    }
+
+    public void Dispose()
+    {
+        for (int i = 0; i < _objectsPool.Count; i++)
+        {
+            Destroy(_objectsPool[i]);
         }
     }
 

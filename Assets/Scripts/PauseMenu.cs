@@ -10,6 +10,10 @@ public class PauseMenu : MonoBehaviour
     public bool isPaused = false;
 
     public GameObject pauseMenuUI;
+    public GameObject hpBar;
+    public GameObject abilityBar;
+    public GameObject killCount;
+    
     
     private void Awake()
     {
@@ -34,6 +38,9 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        hpBar.SetActive(true);
+        abilityBar.SetActive(true);
+        killCount.SetActive(true);
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
@@ -42,13 +49,35 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
+        hpBar.SetActive(false);
+        abilityBar.SetActive(false);
+        killCount.SetActive(false);
         Time.timeScale = 0f;
         isPaused = true;
     }
 
     public void LoadMenu()
     {
+        Player.UpdateStats();
+        ObjectPool.Instance._objectsPool.Clear();
+        PlayerManager.Instance.SaveGame();
         SceneManager.LoadScene("MainMenu");
+        Time.timeScale = 1f;
+    }
+
+    public void GameOver()
+    {
+        Time.timeScale = 1f;
+        ObjectPool.Instance._objectsPool.Clear();
+        PlayerManager.Instance.NewData();
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void Restart()
+    {
+        ObjectPool.Instance.Dispose();
+        ObjectPool.Instance._objectsPool.Clear();
+        PlayerManager.Instance.NewGame();
         Time.timeScale = 1f;
     }
 
