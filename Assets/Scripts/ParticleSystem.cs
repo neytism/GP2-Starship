@@ -10,7 +10,7 @@ public class ParticleSystem : MonoBehaviour
     {
         StartCoroutine(ParticleLife(gameObject, timeBeforeDisabling));
     }
-
+    
     IEnumerator ParticleLife(GameObject particle,float time)
     {
         yield return new WaitForSeconds(time);

@@ -10,18 +10,21 @@ using Random = UnityEngine.Random;
 
 public class CameraFollow : MonoBehaviour
 {
+    //for tracking player
     public Transform target;
     public float smoothSpeed;
     public float shakeDuration;
     private Vector3 tempPos;
     public Vector3 minVal, maxVal;
+    
+    //for camera shake
     private Vector3 _initialPos;
     public float shakeRadius;
     public static bool startShaking = false;
 
     private void Update()
     {
-        if (startShaking)
+        if (startShaking) //checks if camera should be shaken
         {
             startShaking = false;
             StartCoroutine(Shaking());
@@ -40,7 +43,6 @@ public class CameraFollow : MonoBehaviour
         tempPos.x = target.position.x;
         tempPos.y = target.position.y;
         
-        
         //sets camera bounds, camera stops at certain position
         Vector3 boundPosition = new Vector3(
             Mathf.Clamp(tempPos.x,minVal.x,maxVal.x),
@@ -51,9 +53,8 @@ public class CameraFollow : MonoBehaviour
         //adds delay effect on following player
         Vector3 smoothedPos = Vector3.Lerp(transform.position, boundPosition, smoothSpeed * Time.deltaTime);
         transform.position = smoothedPos;
+        
     }
-
-    
 
     IEnumerator Shaking()
     {

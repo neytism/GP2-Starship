@@ -11,21 +11,24 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    //for UI
     [SerializeField] private Image HPBar;
     [SerializeField] public GameObject gameOverScreen;
+    [SerializeField] private TextMeshProUGUI _killCountText;
     
+    //for getting data for other classes
     [SerializeField] private float _maxHealth = 10;
     private static int _currentHealth;
     private static int _killCount;
     private static Vector3 _currentPos;
     
-    [SerializeField] private TextMeshProUGUI _killCountText;
-
     private int _selectedCharacter;
-
     private PlayerManager _playerManager;
-
     private Color _color;
+    
+    [SerializeField] private GameObject _beam;  //for laser ability
+    [SerializeField] private GameObject _aoe;   //for EMP ability
+    public GameObject diePEffect;
     
     private bool _isInvincible = false;
 
@@ -40,25 +43,19 @@ public class Player : MonoBehaviour
         get => _killCount;
         set => _killCount = value;
     }
-
-
-    [SerializeField] private GameObject _beam;
-    [SerializeField] private GameObject _aoe;
-
+    
     public GameObject Beam => _beam;
     public GameObject AOE => _aoe;
-
-
-    public GameObject diePEffect;
-
+    
     private void Update()
     {
-        _currentPos = transform.position;
+        _currentPos = transform.position;   //for saving position
     }
 
     private void Awake()
     {
-        AudioManager.Instance.PlayFadeIn(AudioManager.Sounds.GameBGM,0.005f, .5f);
+        AudioManager.Instance.PlayFadeIn(AudioManager.Sounds.GameBGM,0.005f, .5f);  //BGM
+        
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
         _color = _playerManager.SelectCharacterSprite(PlayerManager.Instance.GetSelectedCharacter());
         gameObject.GetComponent<SpriteRenderer>().color = _color;
@@ -83,14 +80,19 @@ public class Player : MonoBehaviour
                 if (_currentHealth <= 0)  //if player is dead
                 {
                 
-                    //insert death sound here
                     AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.GameBGM);
                     AudioManager.Instance.PlayOnce(AudioManager.Sounds.PlayerDeath);
+                    
                     //did not put pooling because this only happens when dead 
                     GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
                     Destroy(particle, 3);
+                    
+                    //to avoid enemy dying if player is dead, and to avoid movements if dead
                     gameObject.GetComponent<SpriteRenderer>().enabled = false;
                     gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                    gameObject.GetComponent<CircleCollider2D>().enabled = false;
+                    PlayerController.IsPauseOrDead = true;
+                    
                     StartCoroutine(ShowGameOverScreen());
                     Debug.Log("GAME OVER");
                 }
@@ -126,7 +128,7 @@ public class Player : MonoBehaviour
         _killCountText.text = _killCount.ToString();
     }
 
-    public static void UpdateStats()
+    public static void UpdateStats()  //FOR SAVING DATA
     {
         PlayerManager.Instance.Position = _currentPos;
         PlayerManager.Instance.Health = _currentHealth;

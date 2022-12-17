@@ -24,10 +24,6 @@ public class Weapon : MonoBehaviour
         _player = GameObject.FindObjectOfType<PlayerController>();
     }
 
-    private void Start()
-    {
-    }
-
     public void FireWeapon()
     {
         if (this.GameObject().name.Equals("SpreadGun"))
@@ -35,9 +31,6 @@ public class Weapon : MonoBehaviour
             
             for (int i = 0; i < 5; i++)
             {
-
-                //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
-                //GameObject bullet = _bulletPool.GetObject(_bulletPrefab,_player.FirePoint.position);
                 GameObject bullet = ObjectPool.Instance.GetObject(_bulletPrefab, _player.FirePoint.position);
                 bullet.SetActive(true);
                 
@@ -62,18 +55,14 @@ public class Weapon : MonoBehaviour
             }
         } else 
         {
-            //get object from object pool instead of instantiating directly
-            //GameObject bullet = _bulletPool.GetObject(_bulletPrefab, _player.FirePoint.position);
             GameObject bullet = ObjectPool.Instance.GetObject(_bulletPrefab, _player.FirePoint.position);
             bullet.SetActive(true);
-            //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
             bullet.GetComponent<Rigidbody2D>().AddForce(_player.FirePoint.up * _fireForce,ForceMode2D.Impulse);
-            
         }
         
     }
     
-    Vector3 RotateTowardsUp(Vector3 start, float angle) //rotates vector3.up
+    Vector3 RotateTowardsUp(Vector3 start, float angle) //rotates vector3.up for weapon spread
     {
         // if you know start will always be normalized, can skip this step
         start.Normalize();

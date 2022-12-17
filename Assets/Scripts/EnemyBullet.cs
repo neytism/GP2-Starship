@@ -7,10 +7,6 @@ public class EnemyBullet : MonoBehaviour
 {
     public GameObject smallDiePEffect;
 
-    private void Awake()
-    {
-    }
-
     private void OnEnable()
     {
         StartCoroutine(BulletLife(gameObject));
@@ -25,21 +21,18 @@ public class EnemyBullet : MonoBehaviour
     {
         
         Player _player = GameObject.FindObjectOfType<Player>();
+        
         if (col.gameObject.tag.Equals("Player")) {
-            //GameObject particle = Instantiate(smallDiePEffect, transform.position, Quaternion.identity);
-            //Destroy(particle, 3);
-            //GameObject particle = _particlePool.GetObject(smallDiePEffect, transform.position);
             GameObject particle = ObjectPool.Instance.GetObject(smallDiePEffect, transform.position);
             particle.SetActive(true);
             _player.ReduceHealth(1);
         }
         else if (col.gameObject.tag.Equals("Bullet") || col.gameObject.tag.Equals("ExplosionRadius"))
         {
-            
-            //GameObject particle = _particlePool.GetObject(smallDiePEffect, transform.position);
             GameObject particle = ObjectPool.Instance.GetObject(smallDiePEffect, transform.position);
             particle.SetActive(true);
         }
+        
         AudioManager.Instance.PlayOnce(AudioManager.Sounds.MiniExplosion);
         gameObject.SetActive(false);
     }
@@ -47,7 +40,6 @@ public class EnemyBullet : MonoBehaviour
     IEnumerator BulletLife(GameObject bullet)
     {
         yield return new WaitForSeconds(5);
-        //GameObject particle = _particlePool.GetObject(smallDiePEffect,transform.position);
         GameObject particle = ObjectPool.Instance.GetObject(smallDiePEffect, transform.position);
         particle.SetActive(true);
         bullet.SetActive(false);

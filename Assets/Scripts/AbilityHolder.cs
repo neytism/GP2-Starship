@@ -15,26 +15,19 @@ using Debug = UnityEngine.Debug;
 //
 public class AbilityHolder : MonoBehaviour
 {
+    //abilities object
     [SerializeField] private AbilityManager _ability1;
     [SerializeField] private AbilityManager _ability2;
     [SerializeField] private AbilityManager _ability3;
-
-    
     private AbilityManager _ability;
+    
+    //ability cooldown system
     private float _cooldownTime;
-    
-    private PlayerManager _playerManager;
-    
     private float _duration;
-
     private float _activeTime;
-    public float ActiveTime => _activeTime;
-    
-    
     [SerializeField] private Image _CDBar;
     private float _cooldown;
     private bool _isCoolDown;
-
     
     AbilityState state = AbilityState.ready;
 
@@ -45,13 +38,8 @@ public class AbilityHolder : MonoBehaviour
         get => _isCoolDown;
         set => _isCoolDown = value;
     }
-
-    enum AbilityState
-    {
-        ready,
-        active,
-        cooldown
-    }
+    
+    public float ActiveTime => _activeTime;
 
     private void Awake()
     {
@@ -90,10 +78,8 @@ public class AbilityHolder : MonoBehaviour
            case AbilityState.cooldown:
                if (_cooldownTime > 0)
                {
-                   
                    _cooldownTime -= Time.deltaTime;
                    _CDBar.fillAmount = -(_cooldownTime - _ability.Cooldown) /  _ability.Cooldown;
-                  
                }
                else
                {
@@ -102,7 +88,6 @@ public class AbilityHolder : MonoBehaviour
                }
                break; 
         }
-
     }
 
     //for swift dash
@@ -120,14 +105,12 @@ public class AbilityHolder : MonoBehaviour
         gameObject.GetComponent<Player>().IsInvincible  = false;
         Debug.Log("isNotinvincible");
     }
-
     
     //for laser
 
     public void TurnOnLaser()
     {
         StartCoroutine(LaserTime());
-        
     }
     IEnumerator LaserTime()
     {
@@ -144,7 +127,6 @@ public class AbilityHolder : MonoBehaviour
     public void Explode()
     {
         StartCoroutine(ExplosionTime());
-        
     }
     
     IEnumerator ExplosionTime()
@@ -155,8 +137,9 @@ public class AbilityHolder : MonoBehaviour
         gameObject.GetComponent<Player>().AOE.SetActive(false);
         Debug.Log("Explode End");
     }
-    
-    public AbilityManager SelectAbilityType(int index)
+
+    //Returns selected ability from player manager
+    private AbilityManager SelectAbilityType(int index)
     {
         
         switch (index)
@@ -172,4 +155,10 @@ public class AbilityHolder : MonoBehaviour
         return _ability1;
     }
 
+    enum AbilityState
+    {
+        ready,
+        active,
+        cooldown
+    }
 }

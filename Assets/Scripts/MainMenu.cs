@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
@@ -20,10 +19,9 @@ public class MainMenu : MonoBehaviour
         AudioManager.Instance.PlayLoop(AudioManager.Sounds.MainMenuBGM);
         Debug.Log($"Isnewgame: {PlayerManager.Instance.IsNewGame}");
         CheckNewGame();
-        
     }
 
-    public void Init(int value)
+    public void Init(int value)  //initializes value of selected character before selecting
     {
         _selectedCharacter = value;
         PlayerManager.Instance.UpdateSelected(_selectedCharacter);
@@ -51,16 +49,8 @@ public class MainMenu : MonoBehaviour
         PlayerManager.Instance.UpdateSelected(_selectedCharacter);
     }
 
-    public void PlayGame()
-    {
-        SceneManager.LoadScene("GameScene");
-        AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.MainMenuBGM);
-        Debug.Log($"Selected before loading: {_selectedCharacter}");
-    }
-    
     public void QuitGame()
     {
-        //UIClickSound.Play();
         Application.Quit();
     }
 

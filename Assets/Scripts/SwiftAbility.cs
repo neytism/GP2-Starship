@@ -21,7 +21,6 @@ public class SwiftAbility : AbilityManager
 
     public override void Activate(GameObject parent)
     {
-        
         PlayerController movement = parent.GetComponent<PlayerController>();
         AbilityHolder player = parent.GetComponent<AbilityHolder>();
         Rigidbody2D rb = parent.GetComponent<Rigidbody2D>();

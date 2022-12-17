@@ -5,11 +5,10 @@ using UnityEngine;
 [CreateAssetMenu]
 public class EMPAbility : AbilityManager
 {
-    
     public override void Activate(GameObject parent)
     {
         AbilityHolder player = parent.GetComponent<AbilityHolder>();
-
+        
         AudioManager.Instance.PlayOnce(AudioManager.Sounds.EMPsound);
         
         player.Explode();

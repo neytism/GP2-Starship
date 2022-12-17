@@ -5,13 +5,8 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public AudioSource SoundSfx;
+    #region Instance
 
-    public AudioSource SoundBGMusic;
-
-    public SoundType[] sounds;
-    
-    //singleton
     private static AudioManager _instance;
     public static  AudioManager Instance
     {
@@ -31,6 +26,15 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    #endregion
+    
+    //audio source that dont loop
+    public AudioSource SoundSfx;
+    //audio source that loops
+    public AudioSource SoundBGMusic;
+    
+    public SoundType[] sounds;
+    
     public void PlayLoop(Sounds sound)
     {
         AudioClip clip = getSoundClip(sound);
@@ -128,8 +132,6 @@ public class AudioManager : MonoBehaviour
                 SoundBGMusic.volume = audioVolume;
                 yield return new WaitForSeconds(0.1f);
             }
-            
-            
         }
         else
         {
@@ -137,7 +139,6 @@ public class AudioManager : MonoBehaviour
         }
     }
     
-
     private AudioClip getSoundClip(Sounds sound)
     {
         SoundType _soundType = Array.Find(sounds, s => s.soundType == sound);
@@ -154,7 +155,7 @@ public class AudioManager : MonoBehaviour
         public Sounds soundType;
         public AudioClip soundClip;
     }
-    public enum Sounds
+    public enum Sounds  //add sound type here, add at the bottom of the list
     {
         ButtonClick,
         PlayerDeath,

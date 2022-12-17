@@ -28,9 +28,7 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(this);
         }
-        
         LoadData();
-        
     }
 
     #endregion
@@ -60,6 +58,7 @@ public class PlayerManager : MonoBehaviour
 
     public void UpdateSelected(int value)
     {
+        //for updating character selection on main menu
         _sr = GameObject.Find("SelectedSkin").GetComponent<SpriteRenderer>();
         _sr.color = _characters[value].GetComponent<SpriteRenderer>().color;
         _characterName = GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
@@ -105,9 +104,11 @@ public class PlayerManager : MonoBehaviour
 
     public void SetSelected(int value)//for debug
     {
-        _selectedCharacter = value;
+        //_selectedCharacter = value;
     }
     
+    //SAVE SYSTEM
+    //SAVE SYSTEM
     //SAVE SYSTEM
 
     public void NewGame()

@@ -82,6 +82,8 @@ public class ObjectPool : MonoBehaviour
 
     private void CreateObjectParentIfNeeded()
     {
+        //creates object to parent pooled objects to avoid messy scene...
+        
         if (spawnedObjectsParent == null)
         {
             string name = "Object Pool Holder";

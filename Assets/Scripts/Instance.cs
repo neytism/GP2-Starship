@@ -14,4 +14,6 @@ public class Instance : MonoBehaviour
         Instantiate(soundManager, new Vector3(0, 0, 0), Quaternion.identity);
         Instantiate(poolManager, new Vector3(0, 0, 0), Quaternion.identity);
     }
+    
+    //adds instance to avoid errors on unity error, and also to avoid repetition of singletons (i know...)
 }

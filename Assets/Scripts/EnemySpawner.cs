@@ -21,10 +21,6 @@ public class EnemySpawner : MonoBehaviour
     //public GameObject[] enemies;  CAN BE USED FOR MULTIPLE ENEMIES
     [SerializeField] private GameObject _enemyPrefab;
 
-    private void Awake()
-    {
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -34,12 +30,9 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnEnemy()  //spawns enemy based on radius around player
     {
-        
         Vector2 spawnPos = FindObjectOfType<Player>().transform.position;
         spawnPos += Random.insideUnitCircle.normalized * _spawnRadius;
         
-        //Instantiate(_enemyPrefab,spawnPos, Quaternion.identity);
-        //GameObject enemy = _enemyPool.GetObject(_enemyPrefab,spawnPos);
         GameObject enemy = ObjectPool.Instance.GetObject(_enemyPrefab, spawnPos);
         enemy.SetActive(true);
         
@@ -61,7 +54,7 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(RoundCounter()); 
     }
 
-    IEnumerator DelayBeforeSpawning()
+    IEnumerator DelayBeforeSpawning()   //adds delay to show mini tutorial pop up
     {
         yield return new WaitForSeconds(5);
         StartCoroutine(SpawnEnemy());

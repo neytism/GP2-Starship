@@ -38,6 +38,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        PlayerController.IsPauseOrDead = false;
         AudioManager.Instance.ResumePlayingBGM(AudioManager.Sounds.GameBGM);
         hpBar.SetActive(true);
         abilityBar.SetActive(true);
@@ -49,6 +50,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
+        PlayerController.IsPauseOrDead = true;
         AudioManager.Instance.PausePlayingBGM(AudioManager.Sounds.GameBGM);
         pauseMenuUI.SetActive(true);
         hpBar.SetActive(false);

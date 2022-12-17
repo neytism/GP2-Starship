@@ -11,14 +11,13 @@ GameObject:
   - component: {fileID: 8817126348691780836}
   - component: {fileID: 8817126348691780837}
   - component: {fileID: 8817126348691780834}
-  - component: {fileID: 8817126348691780835}
+  - component: {fileID: -8770356307935817925}
   - component: {fileID: 8817126348691780839}
   - component: {fileID: 8817126348691780832}
   - component: {fileID: 8817126348691780838}
   - component: {fileID: 8817126348691780841}
-  - component: {fileID: 8817126348691780840}
   - component: {fileID: 8817126347790262499}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -33,7 +32,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8817126348691780833}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6447598, y: -3.925564, z: 0.02417292}
+  m_LocalPosition: {x: 0.48, y: -12.65, z: 0.02417292}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -118,8 +117,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!60 &8817126348691780835
-PolygonCollider2D:
+--- !u!58 &-8770356307935817925
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -131,21 +130,9 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.28866667}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0, y: 0.5773587}
-      - {x: -0.5, y: -0.28866667}
-      - {x: 0.5, y: -0.28866667}
+  m_Offset: {x: 0, y: -0.0129852295}
+  serializedVersion: 2
+  m_Radius: 0.26781082
 --- !u!60 &8817126348691780839
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -204,14 +191,10 @@ MonoBehaviour:
   HPBar: {fileID: 0}
   gameOverScreen: {fileID: 0}
   _maxHealth: 10
-  _currentHealth: 10
-  _killCount: 0
   _killCountText: {fileID: 0}
   _beam: {fileID: 2471204771719057185}
   _aoe: {fileID: 1910077930999054333}
   diePEffect: {fileID: 6361326539378936758, guid: 12fee52395f8ce84e99344aa1aebb883, type: 3}
-  _deathSound: {fileID: 8300000, guid: 09bec23ce03002f419c03705ef13e0a0, type: 3}
-  _gameOver: {fileID: 8300000, guid: a251740f1e5065746aa021e16ab2e9b6, type: 3}
 --- !u!114 &8817126348691780841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,104 +207,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 720a82458903ab14f95e9ba6bee59c1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ability1: {fileID: 0}
+  _ability2: {fileID: 0}
+  _ability3: {fileID: 0}
   _CDBar: {fileID: 0}
   key: 32
---- !u!82 &8817126348691780840
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8817126348691780833}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 2913b84ccd38e124dbbc3c298c0ee06a, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 0.614
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &8817126347790262499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,6 +234,10 @@ PrefabInstance:
     - target: {fileID: 6921290087700156256, guid: a82b420d194a6df448a34b8b1bbf8e72, type: 3}
       propertyPath: m_Name
       value: LaserBeam
+      objectReference: {fileID: 0}
+    - target: {fileID: 6921290087700156256, guid: a82b420d194a6df448a34b8b1bbf8e72, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6921290087700156256, guid: a82b420d194a6df448a34b8b1bbf8e72, type: 3}
       propertyPath: m_IsActive
@@ -415,6 +309,10 @@ PrefabInstance:
     - target: {fileID: 3542382491430292145, guid: f19313e8fc305df45b85265dbf7bc241, type: 3}
       propertyPath: m_Name
       value: ExplodeGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 3542382491430292145, guid: f19313e8fc305df45b85265dbf7bc241, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3542382491430292146, guid: f19313e8fc305df45b85265dbf7bc241, type: 3}
       propertyPath: m_RootOrder
@@ -530,6 +428,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpreadGun
       objectReference: {fileID: 0}
+    - target: {fileID: 7829060362244879507, guid: 54e2b9823f1e2af488fccef0b2904082, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8358711880480323796, guid: 54e2b9823f1e2af488fccef0b2904082, type: 3}
       propertyPath: _player
       value: 
@@ -551,6 +453,10 @@ PrefabInstance:
     - target: {fileID: 6979819045013819640, guid: 39bacc5953b78a9468742e586ae33d7b, type: 3}
       propertyPath: m_Name
       value: AOESPRITE
+      objectReference: {fileID: 0}
+    - target: {fileID: 6979819045013819640, guid: 39bacc5953b78a9468742e586ae33d7b, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6979819045013819640, guid: 39bacc5953b78a9468742e586ae33d7b, type: 3}
       propertyPath: m_IsActive
@@ -671,6 +577,10 @@ PrefabInstance:
     - target: {fileID: 8572539650753673449, guid: 8d8b7e3c6b55058478a42085479c31df, type: 3}
       propertyPath: m_Name
       value: RapidGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 8572539650753673449, guid: 8d8b7e3c6b55058478a42085479c31df, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d8b7e3c6b55058478a42085479c31df, type: 3}
