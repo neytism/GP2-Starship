@@ -18,19 +18,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _enemyFireForce;
     private float timeBtwShot;
     [SerializeField] private float startTimeBtwShots;
-
-    private ObjectPool _enemyBulletPool;
-    private ObjectPool _particlePool;
-    
     
     [SerializeField] private bool _canFire = true;
     
     
-    
     private void Awake()
     {
-        _enemyBulletPool = gameObject.AddComponent<ObjectPool>();
-        _particlePool = gameObject.AddComponent<ObjectPool>();
         _player = GameObject.FindObjectOfType<Player>();
         timeBtwShot = startTimeBtwShots;
     }
@@ -47,12 +40,13 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Bullet")) 
+        if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Bullet") || col.gameObject.tag.Equals("ExplosionRadius")) 
         {
             //deploys particle before destroying object
             //particle system can be converted to pooling system if time possible
             AudioManager.Instance.PlayOnce(AudioManager.Sounds.EnemyDeath);
-            GameObject particle = _particlePool.GetObject(diePEffect);
+            //GameObject particle = _particlePool.GetObject(diePEffect, transform.position);
+            GameObject particle = ObjectPool.Instance.GetObject(diePEffect, transform.position);
             particle.SetActive(true);
             //GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
             
@@ -62,6 +56,7 @@ public class Enemy : MonoBehaviour
             }
             
             _player.AddKillCount();
+            CameraFollow.startShaking = true;
             gameObject.SetActive(false);
         }
     }
@@ -71,7 +66,8 @@ public class Enemy : MonoBehaviour
         if (timeBtwShot <= 0)
         {
             //GameObject bullet = Instantiate(_enemyBullet, _enemyFirePoint.position, Quaternion.identity);
-            GameObject bullet = _enemyBulletPool.GetObject(_enemyBullet);
+            //GameObject bullet = _enemyBulletPool.GetObject(_enemyBullet, _enemyFirePoint.position);
+            GameObject bullet = ObjectPool.Instance.GetObject(_enemyBullet, _enemyFirePoint.position);
             bullet.SetActive(true);
             bullet.GetComponent<Rigidbody2D>().AddForce(_enemyFirePoint.up * _enemyFireForce,ForceMode2D.Impulse);
             timeBtwShot = startTimeBtwShots;

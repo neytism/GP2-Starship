@@ -14,17 +14,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private float _fireForce = 20f;
     [SerializeField] private float _fireRate = .1f;
-    
 
-    private ObjectPool _bulletPool;
-    
     private PlayerController _player;
     
     public float FireRate => _fireRate;
     
     private void Awake()
     {
-        _bulletPool = GetComponent<ObjectPool>();
         _player = GameObject.FindObjectOfType<PlayerController>();
     }
 
@@ -41,7 +37,8 @@ public class Weapon : MonoBehaviour
             {
 
                 //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
-                GameObject bullet = _bulletPool.GetObject(_bulletPrefab);
+                //GameObject bullet = _bulletPool.GetObject(_bulletPrefab,_player.FirePoint.position);
+                GameObject bullet = ObjectPool.Instance.GetObject(_bulletPrefab, _player.FirePoint.position);
                 bullet.SetActive(true);
                 
                 switch (i)
@@ -66,7 +63,8 @@ public class Weapon : MonoBehaviour
         } else 
         {
             //get object from object pool instead of instantiating directly
-            GameObject bullet = _bulletPool.GetObject(_bulletPrefab);
+            //GameObject bullet = _bulletPool.GetObject(_bulletPrefab, _player.FirePoint.position);
+            GameObject bullet = ObjectPool.Instance.GetObject(_bulletPrefab, _player.FirePoint.position);
             bullet.SetActive(true);
             //GameObject bullet = Instantiate(_bulletPrefab, _player.FirePoint.position, Quaternion.identity);
             bullet.GetComponent<Rigidbody2D>().AddForce(_player.FirePoint.up * _fireForce,ForceMode2D.Impulse);

@@ -7,6 +7,9 @@ TagManager:
   - Bullet
   - Enemy
   - EnemyBullet
+  - ParticleExplosion
+  - ParticleMiniExplosion
+  - ExplosionRadius
   layers:
   - Default
   - TransparentFX

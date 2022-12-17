@@ -7,11 +7,9 @@ public class ExplodingBullet : MonoBehaviour
 {
     [SerializeField] private GameObject _explosionRadius;
     [SerializeField] private AudioClip _explodeSound;
-    private ObjectPool _radiusPool;
 
     private void Awake()
     {
-        _radiusPool = gameObject.AddComponent<ObjectPool>();
     }
 
     private void OnCollisionEnter2D(Collision2D col) 
@@ -26,7 +24,8 @@ public class ExplodingBullet : MonoBehaviour
         {
             //GameObject circle = Instantiate(_explosionRadius, transform.position, Quaternion.identity);
             //Destroy(circle, .1f);
-            GameObject circle = _radiusPool.GetObject(_explosionRadius);
+            //GameObject circle = _radiusPool.GetObject(_explosionRadius, transform.position);
+            GameObject circle = ObjectPool.Instance.GetObject(_explosionRadius, transform.position);
             circle.SetActive(true);
         }
             

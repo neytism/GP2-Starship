@@ -105,6 +105,8 @@ public class PlayerManager : MonoBehaviour
     {
         _selectedCharacter = value;
     }
+    
+    //SAVE SYSTEM
 
     public void NewGame()
     {
