@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Instance : MonoBehaviour
 {
-    public GameObject myPrefab;
+    public GameObject playerManager;
+    public GameObject soundManager;
+    public GameObject poolManager;
 
     void Awake()
     {
-        Instantiate(myPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        Instantiate(playerManager, new Vector3(0, 0, 0), Quaternion.identity);
+        Instantiate(soundManager, new Vector3(0, 0, 0), Quaternion.identity);
+        Instantiate(poolManager, new Vector3(0, 0, 0), Quaternion.identity);
     }
 }

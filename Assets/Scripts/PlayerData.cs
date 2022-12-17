@@ -29,13 +29,8 @@ public class PlayerData
         SelectedCharacter = 0;
     }
     
-    //TODO : Fix bug on not resetting on NewGame
     //TODO : Add Achievement system
-    //TODO : Make Load Game not clickable if no save, Add isNewGame boolean
     //TODO : Add Achievement Section on MainMenu
     //TODO : Track Achievements on Save, but not replace when dead.
-    //TODO : Quit on Pause Menu
-    //TODO : Mute on Pause Menu and Main Menu
-    //TODO : UI sounds
     
 }

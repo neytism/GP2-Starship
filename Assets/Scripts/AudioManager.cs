@@ -8,7 +8,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource SoundSfx;
 
     public AudioSource SoundBGMusic;
-    
+
     public SoundType[] sounds;
     
     //singleton
