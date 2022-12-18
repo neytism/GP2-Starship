@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 //
 //  AchievementManager.cs
 //  Script
@@ -19,18 +20,14 @@ public class AchievementManager : MonoBehaviour
 
     [SerializeField] private GameObject PlayerObject;
     private Player player;
-    //[SerializeField] public TextMeshProUGUI AchievementText;
-    //private TextMeshProUGUI _achText;
-    // 2 lines above for ui testing purposes
-    
-    
-    
-    
-    public int Integer;
-    public float Floating_Point;
 
-    
-    
+
+
+
+    public int Integer;
+
+
+
     public bool AchievementUnlocked(string achievementName)
     {
         bool result = false;
@@ -74,15 +71,10 @@ public class AchievementManager : MonoBehaviour
 
     private void Awake()
     {
-        //_achText = AchievementText;
+        
         player = PlayerObject.GetComponent<Player>();
     }
-
-    private void Update()
-    {
-        Integer = player.KillCount;
-        CheckAchievementCompletion();
-    }
+    
 
     private void CheckAchievementCompletion()
     {
@@ -101,6 +93,10 @@ public class AchievementManager : MonoBehaviour
 
     public class Achievement
     {
+        public delegate void AchievedTask();
+        public static event AchievedTask _onAchievedTask;
+        
+        
         public Achievement(string title, string description, Predicate<object> requirement)
         {
             this.Title = title;
@@ -121,6 +117,7 @@ public class AchievementManager : MonoBehaviour
 
             if (RequirementsMet())
             {
+                
                 Debug.Log($"{Title}: {Description}");
                 Achieved = true;
             }
@@ -131,6 +128,12 @@ public class AchievementManager : MonoBehaviour
             return requirement.Invoke(null);
         }
 
+    }
+    private void Update()
+    {
+        Integer = player.KillCount;
+        CheckAchievementCompletion();
+        
     }
 }
 
