@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +17,13 @@ public class AchievementManager : MonoBehaviour
 {
     public List<Achievement> Achievements;
 
-    [SerializeField] GameObject Player;
+    [SerializeField] private GameObject PlayerObject;
     private Player player;
+    //[SerializeField] public TextMeshProUGUI AchievementText;
+    //private TextMeshProUGUI _achText;
+    // 2 lines above for ui testing purposes
+    
+    
     
     
     public int Integer;
@@ -68,7 +74,8 @@ public class AchievementManager : MonoBehaviour
 
     private void Awake()
     {
-        player = Player.GetComponent<Player>();
+        //_achText = AchievementText;
+        player = PlayerObject.GetComponent<Player>();
     }
 
     private void Update()
