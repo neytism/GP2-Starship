@@ -80,7 +80,7 @@ public class ObjectPool : MonoBehaviour
         return null;
     }
 
-    public GameObject AchievementPanel(GameObject objectToPool, Vector3 pos)
+    public GameObject AchievementPanel(GameObject objectToPool, GameObject parent)
     {
         _objectToPool = objectToPool;
 
@@ -91,22 +91,19 @@ public class ObjectPool : MonoBehaviour
                 //MUST SET PROPER TAGS PER PREFAB IN UNITY EDITOR
                 if (!_objectsPool[i].activeInHierarchy && _objectsPool[i].CompareTag(_objectToPool.tag)) 
                 {
-                    _objectsPool[i].transform.position = pos;
                     return _objectsPool[i];
                 }
             }
         }
-        
 
         
         if (_notEnoughObjectsInPool)
         {
-            GameObject obj = Instantiate(_objectToPool, pos, Quaternion.identity);
-                obj.name = transform.root.name + "_" + _objectToPool.name + "_" + _objectsPool.Count;
-                obj.transform.SetParent(GameObject.Find("Canvas").transform);
-                obj.SetActive(false);
-                _objectsPool.Add(obj);
-                return obj;
+            GameObject obj = Instantiate(_objectToPool, parent.transform);
+            obj.transform.SetParent(parent.transform);
+            obj.SetActive(false);
+            _objectsPool.Add(obj);
+            return obj;
         }
 
         return null;

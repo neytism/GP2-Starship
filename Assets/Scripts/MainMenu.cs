@@ -116,7 +116,8 @@ public class MainMenu : MonoBehaviour
     {
         foreach (var t in PlayerManager.Achievements)
         {
-            GameObject obj = Instantiate(_achievementContent, _achievementPanel.transform);
+            GameObject obj = ObjectPool.Instance.AchievementPanel(_achievementContent, _achievementPanel);
+            obj.SetActive(true);
             obj.transform.SetParent(_achievementPanel.transform);
             obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = t.title;
             obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = t.description;
@@ -130,6 +131,14 @@ public class MainMenu : MonoBehaviour
                 obj.GetComponent<Image>().color = _unlocked;
                 obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "done";
             }
+        }
+    }
+
+    public void BackAchievementPanel() //called on the back button on achievement list
+    {
+        foreach (var o in ObjectPool.Instance._objectsPool)
+        {
+            o.SetActive(false);
         }
     }
 }
