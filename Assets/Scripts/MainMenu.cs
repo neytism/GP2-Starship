@@ -136,7 +136,7 @@ public class MainMenu : MonoBehaviour
 
     public void BackAchievementPanel() //called on the back button on achievement list
     {
-        foreach (var o in ObjectPool.Instance._objectsPool)
+        foreach (var o in ObjectPool.Instance._objectsPoolUI)
         {
             o.SetActive(false);
         }
