@@ -5,8 +5,8 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 //
-//  Copyright © 2022 Kyo Matias, Nate Florendo. All rights reserved.
-//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
 
 public class CameraFollow : MonoBehaviour
 {
@@ -20,15 +20,15 @@ public class CameraFollow : MonoBehaviour
     //for camera shake
     private Vector3 _initialPos;
     public float shakeRadius;
-    public static bool startShaking = false;
 
-    private void Update()
+    private void OnEnable()
     {
-        if (startShaking) //checks if camera should be shaken
-        {
-            startShaking = false;
-            StartCoroutine(Shaking());
-        }
+        Enemy.enemyKill += CameraShake;
+    }
+
+    private void OnDisable()
+    {
+        Enemy.enemyKill -= CameraShake;
     }
 
     void FixedUpdate()
@@ -54,6 +54,11 @@ public class CameraFollow : MonoBehaviour
         Vector3 smoothedPos = Vector3.Lerp(transform.position, boundPosition, smoothSpeed * Time.deltaTime);
         transform.position = smoothedPos;
         
+    }
+
+    private void CameraShake()
+    {
+        StartCoroutine(Shaking());
     }
 
     IEnumerator Shaking()

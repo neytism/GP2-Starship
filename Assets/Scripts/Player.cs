@@ -6,18 +6,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //
-//  Copyright © 2022 Kyo Matias, Nate Florendo. All rights reserved.
-//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
+
 
 public class Player : MonoBehaviour
 {
-    //for UI
-    [SerializeField] private Image HPBar;
-    [SerializeField] public GameObject gameOverScreen;
-    [SerializeField] private TextMeshProUGUI _killCountText;
+    public static event Action playerReduceHealth;
+    public static event Action playerDeath;
+    
     
     //for getting data for other classes
-    [SerializeField] private float _maxHealth = 10;
+    private static float _maxHealth = 10;
     private static int _currentHealth;
     private static int _killCount;
     private static Vector3 _currentPos;
@@ -38,11 +38,14 @@ public class Player : MonoBehaviour
         set => _isInvincible = value;
     }
     
-    public int KillCount
+    public static int KillCount
     {
         get => _killCount;
         set => _killCount = value;
     }
+    
+    public static float MaxHealth => _maxHealth;
+    public static int CurrentHealth => _currentHealth;
     
     public GameObject Beam => _beam;
     public GameObject AOE => _aoe;
@@ -51,93 +54,77 @@ public class Player : MonoBehaviour
     {
         _currentPos = transform.position;   //for saving position
     }
+    
+    private void OnEnable()
+    {
+        Enemy.enemyKill += AddKillCount;
+        Enemy.ennemyCollisionWithPlayer += ReduceHealth;
+    }
+
+    private void OnDisable()
+    {
+        Enemy.enemyKill -= AddKillCount;
+        Enemy.ennemyCollisionWithPlayer -= ReduceHealth;
+    }
 
     private void Awake()
     {
-        AudioManager.Instance.PlayFadeIn(AudioManager.Sounds.GameBGM,0.005f, .5f);  //BGM
-        
         _playerManager = GameObject.FindObjectOfType<PlayerManager>();
         _color = _playerManager.SelectCharacterSprite(PlayerManager.Instance.GetSelectedCharacter());
         gameObject.GetComponent<SpriteRenderer>().color = _color;
         
         _currentHealth = PlayerManager.Instance.Health;
         _killCount = PlayerManager.Instance.Kills;
-        
-        UpdateTextKillCount();
-        HPBarUpdate();
     }
     
     public void ReduceHealth(int value)
     {
-        if (!_isInvincible)
+        if (!_isInvincible) //for debugging
         {
             if (_currentHealth > 0) // if player is not dead
             {
                 _currentHealth -= value;
             
-                Debug.Log($"Health: {_currentHealth}");
+                Debug.Log($"Health: {_currentHealth}"); //remove
             
                 if (_currentHealth <= 0)  //if player is dead
                 {
-                
-                    AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.GameBGM);
-                    AudioManager.Instance.PlayOnce(AudioManager.Sounds.PlayerDeath);
-                    
-                    //did not put pooling because this only happens when dead 
-                    GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
-                    Destroy(particle, 3);
-                    
-                    //to avoid enemy dying if player is dead, and to avoid movements if dead
-                    gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                    gameObject.GetComponent<PolygonCollider2D>().enabled = false;
-                    gameObject.GetComponent<CircleCollider2D>().enabled = false;
-                    PlayerController.IsPauseOrDead = true;
-                    
-                    StartCoroutine(ShowGameOverScreen());
-                    Debug.Log("GAME OVER");
+                    GameOver();
                 }
+                
+                playerReduceHealth?.Invoke();
             }
-            Debug.Log("Player Damaged");
-            
-            HPBarUpdate();
         }
-
     }
     
-    private void HPBarUpdate() //updates health bar using image fill
-    {
-        HPBar.fillAmount =  _currentHealth/ _maxHealth;
-    }
-    
-    IEnumerator ShowGameOverScreen() {
-        yield return new WaitForSeconds(1.5f);
-        AudioManager.Instance.PlayOnce(AudioManager.Sounds.GameOver);
-        gameOverScreen.SetActive(true);
-        
-        Time.timeScale = 0f;
-    }
-
     public void AddKillCount()
     {
         _killCount++;
-        UpdateTextKillCount();
     }
 
-    private void UpdateTextKillCount()
+    private void GameOver()
     {
-        _killCountText.text = _killCount.ToString();
+        AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.GameBGM);
+        AudioManager.Instance.PlayOnce(AudioManager.Sounds.PlayerDeath);
+                    
+        //did not put pooling because this only happens when dead 
+        GameObject particle = Instantiate(diePEffect, transform.position, Quaternion.identity);
+        Destroy(particle, 3);
+                    
+        //to avoid enemy dying if player is dead, and to avoid movements if dead
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        PlayerController.IsPauseOrDead = true;
+        
+        playerDeath?.Invoke();
+        Debug.Log("GAME OVER");
     }
-
+    
     public static void UpdateStats()  //FOR SAVING DATA
     {
         PlayerManager.Instance.Position = _currentPos;
         PlayerManager.Instance.Health = _currentHealth;
         PlayerManager.Instance.Kills = _killCount;
     }
-
-    private void OnApplicationQuit()
-    {
-        UpdateStats();
-    }
-
 }

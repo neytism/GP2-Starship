@@ -7,8 +7,8 @@ using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
 
 //
-//  Copyright © 2022 Kyo Matias, Nate Florendo. All rights reserved.
-//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
 
 public class ObjectPool : MonoBehaviour
 {
@@ -80,13 +80,45 @@ public class ObjectPool : MonoBehaviour
         return null;
     }
 
+    public GameObject AchievementPanel(GameObject objectToPool, Vector3 pos)
+    {
+        _objectToPool = objectToPool;
+
+        if (_objectsPool.Count > 0)
+        {
+            for (int i = 0; i < _objectsPool.Count; i++)
+            {
+                //MUST SET PROPER TAGS PER PREFAB IN UNITY EDITOR
+                if (!_objectsPool[i].activeInHierarchy && _objectsPool[i].CompareTag(_objectToPool.tag)) 
+                {
+                    _objectsPool[i].transform.position = pos;
+                    return _objectsPool[i];
+                }
+            }
+        }
+        
+
+        
+        if (_notEnoughObjectsInPool)
+        {
+            GameObject obj = Instantiate(_objectToPool, pos, Quaternion.identity);
+                obj.name = transform.root.name + "_" + _objectToPool.name + "_" + _objectsPool.Count;
+                obj.transform.SetParent(GameObject.Find("Canvas").transform);
+                obj.SetActive(false);
+                _objectsPool.Add(obj);
+                return obj;
+        }
+
+        return null;
+    }
+
     private void CreateObjectParentIfNeeded()
     {
         //creates object to parent pooled objects to avoid messy scene...
         
         if (spawnedObjectsParent == null)
         {
-            string name = "Object Pool Holder";
+            string name = "ObjectPoolHolder";
             var parentObject = GameObject.Find(name);
             if (parentObject != null)
                 spawnedObjectsParent = parentObject.transform;

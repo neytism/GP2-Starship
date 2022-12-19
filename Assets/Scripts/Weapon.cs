@@ -5,8 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 //
-//  Copyright © 2022 Kyo Matias, Nate Florendo. All rights reserved.
-//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
+
 
 public class Weapon : MonoBehaviour
 {

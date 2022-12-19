@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //
-//  .cs
-//  Script
-//
-//  Created by Kyo Matias on 00/00/2022.
-//  Copyright © 2022 Kyo Matias. All rights reserved.
-//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
+
 [CreateAssetMenu]
 public class LaserAbility : AbilityManager
 {

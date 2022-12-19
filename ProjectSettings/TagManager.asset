@@ -10,11 +10,12 @@ TagManager:
   - ParticleExplosion
   - ParticleMiniExplosion
   - ExplosionRadius
+  - AchievementPopUp
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Bullet
@@ -55,4 +56,10 @@ TagManager:
     locked: 0
   - name: Game
     uniqueID: 484407163
+    locked: 0
+  - name: Background
+    uniqueID: 3335555525
+    locked: 0
+  - name: Foreground
+    uniqueID: 4024786229
     locked: 0

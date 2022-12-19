@@ -5,11 +5,14 @@ using Unity.Mathematics;
 using UnityEngine;
 
 //
-//  Copyright © 2022 Kyo Matias, Nate Florendo. All rights reserved.
-//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
 
 public class Enemy : MonoBehaviour
 {
+    public static event Action enemyKill;
+    public static event Action<int> ennemyCollisionWithPlayer;
+    
     private Player _player;
     [SerializeField] private int _damage = 1;
     public GameObject diePEffect;
@@ -30,11 +33,10 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (_canFire)  //for debugging, set _canfire to false
+        if (_canFire)  //for debugging, set _canfire to false/true
         {
             EnemyFire();
         }
-       
     }
 
 
@@ -47,11 +49,10 @@ public class Enemy : MonoBehaviour
             particle.SetActive(true);
             
             if (col.gameObject.tag.Equals("Player")) {
-               _player.ReduceHealth(_damage);
+                ennemyCollisionWithPlayer?.Invoke(_damage);
             }
             
-            _player.AddKillCount();
-            CameraFollow.startShaking = true;
+            enemyKill?.Invoke();
             gameObject.SetActive(false);
         }
     }

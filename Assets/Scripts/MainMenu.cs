@@ -4,15 +4,27 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
+
+
 public class MainMenu : MonoBehaviour
 {
     private int _selectedCharacter;
     [SerializeField] private GameObject _loadButton;
+    [SerializeField] private GameObject _achievementContent;
+    [SerializeField] private GameObject _achievementPanel;
     [SerializeField] private TextMeshProUGUI BGMtext;
     [SerializeField] private TextMeshProUGUI SFXtext;
+    
+    [SerializeField] private Color _locked;
+    [SerializeField] private Color _unlocked;
+    
     private bool _isMutedBGM = false;
     private bool _isMutedSFX = false;
-    
+
 
     private void Start()
     {
@@ -21,6 +33,7 @@ public class MainMenu : MonoBehaviour
         CheckNewGame();
     }
 
+    
     public void Init(int value)  //initializes value of selected character before selecting
     {
         _selectedCharacter = value;
@@ -94,8 +107,29 @@ public class MainMenu : MonoBehaviour
         }
     }
     
-    public void ClickSound()
+    public void ClickSound() //Referenced on EventTrigger component of UI buttons
     {
         AudioManager.Instance.PlayOnce(AudioManager.Sounds.ButtonClick);
+    }
+    
+    public void LoadAchievementsPanel() // DISPLAYS ACHIEVEMENTS ON MAIN MENU USING THE LIST FROM ACHIEVEMENT MANAGER
+    {
+        foreach (var t in PlayerManager.Achievements)
+        {
+            GameObject obj = Instantiate(_achievementContent, _achievementPanel.transform);
+            obj.transform.SetParent(_achievementPanel.transform);
+            obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = t.title;
+            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = t.description;
+            if (!t.achieved)
+            {
+                obj.GetComponent<Image>().color = _locked;
+                obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
+            }
+            else
+            {
+                obj.GetComponent<Image>().color = _unlocked;
+                obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "done";
+            }
+        }
     }
 }

@@ -7,12 +7,9 @@ using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 //
-//  .cs
-//  Script
-//
-//  Created by Kyo Matias on 00/00/2022.
-//  Copyright © 2022 Kyo Matias. All rights reserved.
-//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
+
 public class AbilityHolder : MonoBehaviour
 {
     //abilities object

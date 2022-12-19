@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+//  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
+//  
+
+
 public class AudioManager : MonoBehaviour
 {
     #region Instance
@@ -34,6 +39,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource SoundBGMusic;
     
     public SoundType[] sounds;
+    private Coroutine routine;
     
     public void PlayLoop(Sounds sound)
     {
@@ -65,6 +71,11 @@ public class AudioManager : MonoBehaviour
 
     public void StopPlayingBGM(Sounds sound)
     {
+        if (routine != null)
+        {
+            StopCoroutine(routine); // to avoid stuttering 
+        }
+        
         AudioClip clip = getSoundClip(sound);
 
         if (clip != null)
@@ -107,11 +118,12 @@ public class AudioManager : MonoBehaviour
             Debug.Log("No clip found for Sound Type");
         }
     }
+
     
 
     public void PlayFadeIn(Sounds sound, float speed, float maxVolume)
     {
-        StartCoroutine(FadeIn(sound, speed, maxVolume));
+        routine = StartCoroutine(FadeIn(sound, speed, maxVolume));
     }
     
     
@@ -167,6 +179,7 @@ public class AudioManager : MonoBehaviour
         EMPsound,
         SwiftSound,
         MiniExplosion,
-        GameOver
+        GameOver,
+        Achievement
     }
 }
