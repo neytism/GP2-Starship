@@ -40,7 +40,6 @@ public class ObjectPool : MonoBehaviour
     private bool _notEnoughObjectsInPool = true;
 
     public List<GameObject> _objectsPool;
-    public List<GameObject> _objectsPoolUI;
     public Transform spawnedObjectsParent;
 
     private void Start()
@@ -80,35 +79,7 @@ public class ObjectPool : MonoBehaviour
 
         return null;
     }
-
-    public GameObject AchievementPanel(GameObject objectToPool, GameObject parent)
-    {
-        _objectToPool = objectToPool;
-
-        if (_objectsPoolUI.Count > 0)
-        {
-            for (int i = 0; i < _objectsPoolUI.Count; i++)
-            {
-                //MUST SET PROPER TAGS PER PREFAB IN UNITY EDITOR
-                if (!_objectsPoolUI[i].activeInHierarchy && _objectsPoolUI[i].CompareTag(_objectToPool.tag)) 
-                {
-                    return _objectsPoolUI[i];
-                }
-            }
-        }
-
-        
-        if (_notEnoughObjectsInPool)
-        {
-            GameObject obj = Instantiate(_objectToPool, parent.transform);
-            obj.transform.SetParent(parent.transform);
-            obj.SetActive(false);
-            _objectsPoolUI.Add(obj);
-            return obj;
-        }
-
-        return null;
-    }
+    
 
     private void CreateObjectParentIfNeeded()
     {
@@ -130,9 +101,9 @@ public class ObjectPool : MonoBehaviour
 
     public void Dispose()
     {
-        for (int i = 0; i < _objectsPool.Count; i++)
+        foreach (var t in _objectsPool)
         {
-            Destroy(_objectsPool[i]);
+            Destroy(t);
         }
     }
 

@@ -21,7 +21,8 @@ public class MainMenu : MonoBehaviour
     
     [SerializeField] private Color _locked;
     [SerializeField] private Color _unlocked;
-    
+    private List<GameObject> _achList;
+
     private bool _isMutedBGM = false;
     private bool _isMutedSFX = false;
 
@@ -116,8 +117,7 @@ public class MainMenu : MonoBehaviour
     {
         foreach (var t in PlayerManager.Achievements)
         {
-            GameObject obj = ObjectPool.Instance.AchievementPanel(_achievementContent, _achievementPanel);
-            obj.SetActive(true);
+            GameObject obj = Instantiate(_achievementContent, _achievementPanel.transform);
             obj.transform.SetParent(_achievementPanel.transform);
             obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = t.title;
             obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = t.description;
@@ -134,11 +134,11 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    public void BackAchievementPanel() //called on the back button on achievement list
+    public void BackAchievementPanel() //called on the back button on achievement list, must fix
     {
-        foreach (var o in ObjectPool.Instance._objectsPoolUI)
+        foreach (Transform child in _achievementPanel.transform)
         {
-            o.SetActive(false);
+            Destroy(child.gameObject);
         }
     }
 }
