@@ -24,7 +24,7 @@ public class UserInterfaceManager : MonoBehaviour
     {
         AudioManager.Instance.PlayFadeIn(AudioManager.Sounds.GameBGM,0.005f, .5f);  //BGM
         UpdateKillCountText();
-        UpdateHPBar();
+        HPBar.fillAmount = PlayerManager.Instance.Health / Player.MaxHealth;
     }
 
     private void OnEnable()

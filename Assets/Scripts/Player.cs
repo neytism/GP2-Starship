@@ -127,4 +127,10 @@ public class Player : MonoBehaviour
         PlayerManager.Instance.Health = _currentHealth;
         PlayerManager.Instance.Kills = _killCount;
     }
+
+    private void OnApplicationQuit()
+    {
+        UpdateStats();
+        PlayerManager.Instance.SaveGame();
+    }
 }

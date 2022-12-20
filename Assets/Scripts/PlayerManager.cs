@@ -38,6 +38,8 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
+    //calls LoadData on awake
+    
     [SerializeField] private PlayerData _newPlayerData;
     [SerializeField] private PlayerData _localPlayerData;
 
@@ -59,24 +61,6 @@ public class PlayerManager : MonoBehaviour
     private static int _selectedCharacter;
     private static List<Achievement> _achievements;
     private static int _totalKillsInGame;
-    
-    public Color SelectCharacterSprite(int index)
-    {
-        return _characters[index].GetComponent<SpriteRenderer>().color;
-    }
-
-    public void UpdateSelected(int value)
-    {
-        //for updating character selection on main menu
-        _sr = GameObject.Find("SelectedSkin").GetComponent<SpriteRenderer>();
-        _sr.color = _characters[value].GetComponent<SpriteRenderer>().color;
-        _characterName = GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
-        _characterDescription = GameObject.Find("Description").GetComponent<TextMeshProUGUI>();
-        _characterName.text = _names[value];
-        _characterDescription.text = _description[value];
-        _selectedCharacter = value;
-        Debug.Log($"Selected: {value}");
-    }
 
     public int GetSelectedCharacter()
     {
@@ -121,6 +105,24 @@ public class PlayerManager : MonoBehaviour
     {
         get => _totalKillsInGame;
         set => _totalKillsInGame = value;
+    }
+    
+    public Color SelectCharacterSprite(int index)
+    {
+        return _characters[index].GetComponent<SpriteRenderer>().color;
+    }
+
+    public void UpdateSelected(int value)
+    {
+        //for updating character selection on main menu
+        _sr = GameObject.Find("SelectedSkin").GetComponent<SpriteRenderer>();
+        _sr.color = _characters[value].GetComponent<SpriteRenderer>().color;
+        _characterName = GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
+        _characterDescription = GameObject.Find("Description").GetComponent<TextMeshProUGUI>();
+        _characterName.text = _names[value];
+        _characterDescription.text = _description[value];
+        _selectedCharacter = value;
+        Debug.Log($"Selected: {value}");
     }
 
     //SAVE SYSTEM
@@ -230,11 +232,5 @@ public class PlayerManager : MonoBehaviour
 
     }
 
-    private void OnApplicationQuit()
-    {
-        Player.UpdateStats();
-        SaveGame();
-    }
-    
-    
+
 }
