@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,17 +22,18 @@ public class MainMenu : MonoBehaviour
     
     [SerializeField] private Color _locked;
     [SerializeField] private Color _unlocked;
-    private List<GameObject> _achList;
 
     private bool _isMutedBGM = false;
     private bool _isMutedSFX = false;
 
+    private bool _isLoaded;
 
     private void Start()
     {
         AudioManager.Instance.PlayLoop(AudioManager.Sounds.MainMenuBGM);
         Debug.Log($"Isnewgame: {PlayerManager.Instance.IsNewGame}");
         CheckNewGame();
+        _isLoaded = false;
     }
 
     
@@ -115,30 +117,36 @@ public class MainMenu : MonoBehaviour
     
     public void LoadAchievementsPanel() // DISPLAYS ACHIEVEMENTS ON MAIN MENU USING THE LIST FROM ACHIEVEMENT MANAGER
     {
-        foreach (var t in PlayerManager.Achievements)
+        if (!_isLoaded)
         {
-            GameObject obj = Instantiate(_achievementContent, _achievementPanel.transform);
-            obj.transform.SetParent(_achievementPanel.transform);
-            obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = t.title;
-            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = t.description;
-            if (!t.achieved)
+            foreach (var t in PlayerManager.Achievements)
             {
-                obj.GetComponent<Image>().color = _locked;
-                obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
+                GameObject obj = Instantiate(_achievementContent, _achievementPanel.transform);
+                obj.transform.SetParent(_achievementPanel.transform);
+                obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = t.title;
+                obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = t.description;
+                if (!t.achieved)
+                {
+                    obj.GetComponent<Image>().color = _locked;
+                    obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
+                }
+                else
+                {
+                    obj.GetComponent<Image>().color = _unlocked;
+                    obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "done";
+                }
             }
-            else
-            {
-                obj.GetComponent<Image>().color = _unlocked;
-                obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "done";
-            }
+
+            _isLoaded = true;
         }
+        
     }
 
     public void BackAchievementPanel() //called on the back button on achievement list, must fix
     {
-        foreach (Transform child in _achievementPanel.transform)
-        {
-            Destroy(child.gameObject);
-        }
+        // foreach (Transform child in _achievementPanel.transform)
+        // {
+        //     Destroy(child.gameObject);
+        // }
     }
 }
