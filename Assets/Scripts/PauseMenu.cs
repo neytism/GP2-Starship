@@ -19,12 +19,12 @@ public class PauseMenu : MonoBehaviour
     public GameObject hpBar;
     public GameObject abilityBar;
     public GameObject killCount;
+    public GameObject boundWarning;
     
     private void Awake()
     {
         pauseMenuUI.SetActive(false);
     }
-
 
     // Update is called once per frame
     void Update()
@@ -49,6 +49,7 @@ public class PauseMenu : MonoBehaviour
         hpBar.SetActive(true);
         abilityBar.SetActive(true);
         killCount.SetActive(true);
+        boundWarning.SetActive(true);
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
@@ -60,6 +61,7 @@ public class PauseMenu : MonoBehaviour
         AudioManager.Instance.PausePlayingBGM(AudioManager.Sounds.GameBGM);
         pauseMenuUI.SetActive(true);
         hpBar.SetActive(false);
+        boundWarning.SetActive(false);
         abilityBar.SetActive(false);
         killCount.SetActive(false);
         Time.timeScale = 0f;
@@ -71,7 +73,8 @@ public class PauseMenu : MonoBehaviour
         AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.GameBGM);
         Player.UpdateStats();
         ObjectPool.Instance._objectsPool.Clear();
-        PlayerManager.Instance.SaveGame();
+        SaveManager.Instance.IsNewGame = false;
+        SaveManager.Instance.SaveGame();
         SceneManager.LoadScene("MainMenu");
         Time.timeScale = 1f;
     }
@@ -79,17 +82,19 @@ public class PauseMenu : MonoBehaviour
     public void GameOver()
     {
         Time.timeScale = 1f;
+        Player.UpdateStats();
         ObjectPool.Instance._objectsPool.Clear();
-        PlayerManager.Instance.NewData();
+        SaveManager.Instance.IsNewGame = true;
+        SaveManager.Instance.SaveGame();
         SceneManager.LoadScene("MainMenu");
     }
 
     public void Restart()
     {
         AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.GameBGM);
-        ObjectPool.Instance.Dispose();
+        ObjectPool.Instance.Dispose(ObjectPool.Instance._objectsPool);
         ObjectPool.Instance._objectsPool.Clear();
-        PlayerManager.Instance.NewGame();
+        SaveManager.Instance.NewGame();
         Time.timeScale = 1f;
     }
     

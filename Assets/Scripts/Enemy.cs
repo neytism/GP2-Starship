@@ -23,8 +23,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float startTimeBtwShots;
     
     [SerializeField] private bool _canFire = true;  //debug
-    
-    
+    private bool _isDead;
+
+    private void OnEnable()
+    {
+        _isDead = false;
+    }
+
     private void Awake()
     {
         _player = GameObject.FindObjectOfType<Player>();
@@ -42,19 +47,24 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Bullet") || col.gameObject.tag.Equals("ExplosionRadius")) 
+        if (!_isDead)
         {
-            AudioManager.Instance.PlayOnce(AudioManager.Sounds.EnemyDeath);
-            GameObject particle = ObjectPool.Instance.GetObject(diePEffect, transform.position);
-            particle.SetActive(true);
+            if (col.gameObject.tag.Equals("Player") || col.gameObject.tag.Equals("Bullet") || col.gameObject.tag.Equals("ExplosionRadius")) 
+            {
+                AudioManager.Instance.PlayOnce(AudioManager.Sounds.EnemyDeath);
+                GameObject particle = ObjectPool.Instance.GetObject(diePEffect, transform.position);
+                particle.SetActive(true);
             
-            if (col.gameObject.tag.Equals("Player")) {
-                ennemyCollisionWithPlayer?.Invoke(_damage);
+                if (col.gameObject.tag.Equals("Player")) {
+                    ennemyCollisionWithPlayer?.Invoke(_damage);
+                }
+            
+                enemyKill?.Invoke();
+                _isDead = true;
+                gameObject.SetActive(false);
             }
-            
-            enemyKill?.Invoke();
-            gameObject.SetActive(false);
         }
+        
     }
 
     public void EnemyFire()

@@ -12,12 +12,12 @@ using UnityEngine.SceneManagement;
 //  
 
 
-public class PlayerManager : MonoBehaviour
+public class SaveManager : MonoBehaviour
 {
     #region Instance
 
-    private static PlayerManager _instance;
-    public static  PlayerManager Instance
+    private static SaveManager _instance;
+    public static  SaveManager Instance
     {
         get { return _instance; }
     }
@@ -53,14 +53,20 @@ public class PlayerManager : MonoBehaviour
     private TextMeshProUGUI _characterName;
     private TextMeshProUGUI _characterDescription;
 
-    //static data
+    //local data
     private static bool _isNewGame;
     private static int _health = 10;
     private static int _kills;
     private static Vector3 _position;
     private static int _selectedCharacter;
-    private static List<Achievement> _achievements;
+    private static Achievement[] _achievements;
     private static int _totalKillsInGame;
+    private static int _totalDeathsInGame;
+    private static int _highScore;
+    private static bool _isFirstTimePlaying;
+    private static int _lastRoundIn;
+
+    #region GetSets
 
     public int GetSelectedCharacter()
     {
@@ -95,28 +101,56 @@ public class PlayerManager : MonoBehaviour
         set => _position = value;
     }
     
-    public static List<Achievement> Achievements
+    public static  Achievement[] Achievements
     {
         get => _achievements;
         set => _achievements = value;
     }
     
-    public static int TotalKillsInGame
+    public int TotalKillsInGame
     {
         get => _totalKillsInGame;
         set => _totalKillsInGame = value;
     }
     
-    public Color SelectCharacterSprite(int index)
+    public int TotalDeathsInGame
     {
-        return _characters[index].GetComponent<SpriteRenderer>().color;
+        get => _totalDeathsInGame;
+        set => _totalDeathsInGame = value;
+    }
+
+    public int HighScore
+    {
+        get => _highScore;
+        set => _highScore = value;
+    }
+
+    public bool IsFirstTimePlaying
+    {
+        get => _isFirstTimePlaying;
+        set => _isFirstTimePlaying = value;
+    }
+
+    public int LastRoundIn
+    {
+        get => _lastRoundIn;
+        set => _lastRoundIn = value;
+    }
+
+    #endregion
+
+    public SpriteRenderer SelectCharacterSprite(int index)
+    {
+        return _characters[index].GetComponent<SpriteRenderer>();
     }
 
     public void UpdateSelected(int value)
     {
         //for updating character selection on main menu
         _sr = GameObject.Find("SelectedSkin").GetComponent<SpriteRenderer>();
-        _sr.color = _characters[value].GetComponent<SpriteRenderer>().color;
+        _sr.sprite = _characters[value].GetComponent<SpriteRenderer>().sprite;
+        _sr.drawMode = _characters[value].GetComponent<SpriteRenderer>().drawMode;
+        _sr.size = _characters[value].GetComponent<SpriteRenderer>().size;
         _characterName = GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
         _characterDescription = GameObject.Find("Description").GetComponent<TextMeshProUGUI>();
         _characterName.text = _names[value];
@@ -138,16 +172,13 @@ public class PlayerManager : MonoBehaviour
 
     public void NewData()
     {
-        _newPlayerData = new PlayerData();
+        _newPlayerData = new PlayerData(_isNewGame,_selectedCharacter,_achievements, _totalKillsInGame, _totalDeathsInGame, _highScore);
         var data = JsonConvert.SerializeObject(_newPlayerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
         PlayerPrefs.SetString(SAVE_DATA_KEY, data);
-        Debug.Log($"{nameof(PlayerManager)}.{nameof(NewGame)} : {data}");
+        Debug.Log($"{nameof(SaveManager)}.{nameof(NewGame)} : {data}");
         
         //loading data for new game
-        _isNewGame = _newPlayerData.IsNewGame;
-        _health = _newPlayerData.Health;
-        _kills = _newPlayerData.Kills;
-        _position = _newPlayerData.Position;
+        LoadDataOnLocalData(_newPlayerData);
     }
 
     public void LoadData()
@@ -158,18 +189,13 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("Has data to load");
             var jsonToConvert = PlayerPrefs.GetString(SAVE_DATA_KEY);
-            Debug.Log($"{nameof(PlayerManager)}.{nameof(LoadGame)} : {jsonToConvert}");
+            Debug.Log($"{nameof(SaveManager)}.LoadData : {jsonToConvert}");
             _localPlayerData = JsonConvert.DeserializeObject<PlayerData>(jsonToConvert, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
             
             // Setting up data when loading
 
-            _isNewGame = _localPlayerData.IsNewGame;
-            _selectedCharacter = _localPlayerData.SelectedCharacter;
-            _kills = _localPlayerData.Kills;
-            _health = _localPlayerData.Health;
-            _position = _localPlayerData.Position;
-            _achievements = AchievementManager.achievements;
-            _totalKillsInGame = _localPlayerData.TotalKillsInGame;
+            LoadDataOnLocalData(_localPlayerData);
+            
         }
         else
         {
@@ -178,55 +204,45 @@ public class PlayerManager : MonoBehaviour
             _newPlayerData = new PlayerData();
             var data = JsonConvert.SerializeObject(_newPlayerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
             PlayerPrefs.SetString(SAVE_DATA_KEY, data);
-        
-            //loading data for new game
-            _isNewGame = _newPlayerData.IsNewGame;
-            _health = _newPlayerData.Health;
-            _kills = _newPlayerData.Kills;
-            _position = _newPlayerData.Position;
-            _achievements = AchievementManager.achievements;
-            _totalKillsInGame = _newPlayerData.TotalKillsInGame;
+            LoadDataOnLocalData(_newPlayerData);
+            AchievementManager.InitializeData();
+            Debug.Log($"{nameof(SaveManager)}.LoadData : {data}");
         } 
     }
+
+    private void LoadDataOnLocalData(PlayerData playerData)
+    {
+        _isNewGame = playerData.IsNewGame;
+        _health = playerData.Health;
+        _kills = playerData.Kills;
+        _position = playerData.Position;
+        _selectedCharacter = playerData.SelectedCharacter;
+        _achievements = playerData.Achievements;
+        _totalKillsInGame = playerData.TotalKillsInGame;
+        _totalDeathsInGame = playerData.TotalDeathsInGame;
+        _highScore = playerData.HighScore;
+        _isFirstTimePlaying = playerData.IsFirstTimePlaying;
+        _lastRoundIn = playerData.LastRoundIn;
+    }
+    
     public void LoadGame()
     {
-        LoadData();
-        SceneManager.LoadScene("GameScene");
         AudioManager.Instance.StopPlayingBGM(AudioManager.Sounds.MainMenuBGM);
+        SceneManager.LoadScene("GameScene");
     }
     
     public void SaveGame()
     {
-        //save date
-        Debug.Log($"Position on Save {_position}");
-        _localPlayerData = new PlayerData(false, _health, _kills, _position, _selectedCharacter, _achievements, _totalKillsInGame);
-        
+        //save data
+        _localPlayerData = new PlayerData(_isNewGame, _health,_kills, _position, _selectedCharacter, _achievements, _totalKillsInGame, _totalDeathsInGame, _highScore, _isFirstTimePlaying, _lastRoundIn);
         var playerData = JsonConvert.SerializeObject(_localPlayerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
-        Debug.Log($"{nameof(PlayerManager)}.{nameof(SaveGame)} : {playerData}");
+        Debug.Log($"{nameof(SaveManager)}.{nameof(SaveGame)} : {playerData}");
         PlayerPrefs.SetString(SAVE_DATA_KEY, playerData);
     }
 
     public void ResetGameData()  // RESETS ALL DATA
     {
-        _newPlayerData = new PlayerData();
-        var data = JsonConvert.SerializeObject(_newPlayerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
-        PlayerPrefs.SetString(SAVE_DATA_KEY, data);
-        Debug.Log($"{nameof(PlayerManager)}.{nameof(NewGame)} : {data}");
-        
-        //loading data for new game for reset
-        _isNewGame = _newPlayerData.IsNewGame;
-        _health = _newPlayerData.Health;
-        _kills = _newPlayerData.Kills;
-        _position = _newPlayerData.Position;
-        _totalKillsInGame = _newPlayerData.TotalKillsInGame;
-
-        AchievementManager.totalKillInGame = _totalKillsInGame;
-        for (int i = 0 ; i < AchievementManager.achievements.Count; i++)
-        {
-            AchievementManager.achievements[i].ResetAchievment();
-        }
-
-        _achievements = AchievementManager.achievements;
+        PlayerPrefs.DeleteAll();
         Debug.Log("GAME HAS BEEN RESET");
         SceneManager.LoadScene("MainMenu");
 

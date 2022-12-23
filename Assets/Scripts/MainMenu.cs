@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 //
 //  Copyright © 2022 Kyo Matias & Nate Florendo. All rights reserved.
@@ -26,32 +27,33 @@ public class MainMenu : MonoBehaviour
     private bool _isMutedBGM = false;
     private bool _isMutedSFX = false;
 
-    private bool _isLoaded;
+    private static bool _isLoaded;
 
     private void Start()
     {
         AudioManager.Instance.PlayLoop(AudioManager.Sounds.MainMenuBGM);
-        Debug.Log($"Isnewgame: {PlayerManager.Instance.IsNewGame}");
+        Debug.Log($"Isnewgame: {SaveManager.Instance.IsNewGame}");
         CheckNewGame();
+        ObjectPool.Instance._objectsPoolUI.Clear();
+        ObjectPool.Instance.Dispose(ObjectPool.Instance._objectsPoolUI);
         _isLoaded = false;
     }
-
     
     public void Init(int value)  //initializes value of selected character before selecting
     {
         _selectedCharacter = value;
-        PlayerManager.Instance.UpdateSelected(_selectedCharacter);
+        SaveManager.Instance.UpdateSelected(_selectedCharacter);
     }
     
     public void NextOption()
     {
         _selectedCharacter += 1;
-        if (_selectedCharacter == PlayerManager.Instance.GetChartacterCount())
+        if (_selectedCharacter == SaveManager.Instance.GetChartacterCount())
         {
             _selectedCharacter = 0;
         }
 
-        PlayerManager.Instance.UpdateSelected(_selectedCharacter);
+        SaveManager.Instance.UpdateSelected(_selectedCharacter);
     }
     
     public void BackOption()
@@ -59,10 +61,10 @@ public class MainMenu : MonoBehaviour
         _selectedCharacter -= 1;
         if (_selectedCharacter < 0)
         {
-            _selectedCharacter = PlayerManager.Instance.GetChartacterCount()-1;
+            _selectedCharacter = SaveManager.Instance.GetChartacterCount()-1;
         }
 
-        PlayerManager.Instance.UpdateSelected(_selectedCharacter);
+        SaveManager.Instance.UpdateSelected(_selectedCharacter);
     }
 
     public void QuitGame()
@@ -72,7 +74,7 @@ public class MainMenu : MonoBehaviour
 
     private void CheckNewGame()
     {
-        if (PlayerManager.Instance.IsNewGame)
+        if (SaveManager.Instance.IsNewGame)
         {
             _loadButton.GetComponent<Button>().interactable = false;
         }
@@ -119,34 +121,28 @@ public class MainMenu : MonoBehaviour
     {
         if (!_isLoaded)
         {
-            foreach (var t in PlayerManager.Achievements)
+            foreach (var t in SaveManager.Achievements)
             {
-                GameObject obj = Instantiate(_achievementContent, _achievementPanel.transform);
+                //GameObject obj = Instantiate(_achievementContent, _achievementPanel.transform);
+                GameObject obj =
+                    ObjectPool.Instance.GetObjectUI(_achievementContent, _achievementPanel.transform);
                 obj.transform.SetParent(_achievementPanel.transform);
                 obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = t.title;
                 obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = t.description;
                 if (!t.achieved)
                 {
                     obj.GetComponent<Image>().color = _locked;
-                    obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "";
+                    obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "✘";
                 }
                 else
                 {
                     obj.GetComponent<Image>().color = _unlocked;
-                    obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "done";
+                    obj.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "✔";
                 }
             }
-
+            Debug.Log($"Achievement count: {SaveManager.Achievements}");
+            Debug.Log($"ObjectPoolUI count: {ObjectPool.Instance._objectsPoolUI.Count}");
             _isLoaded = true;
         }
-        
-    }
-
-    public void BackAchievementPanel() //called on the back button on achievement list, must fix
-    {
-        // foreach (Transform child in _achievementPanel.transform)
-        // {
-        //     Destroy(child.gameObject);
-        // }
     }
 }

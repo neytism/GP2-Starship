@@ -12,19 +12,21 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public static event Action playerReduceHealth;
+    public static event Action updateHealthBarUI;
     public static event Action playerDeath;
-    
-    
+    public static event Action updateKillCountUI; 
+
+
     //for getting data for other classes
     private static float _maxHealth = 10;
     private static int _currentHealth;
     private static int _killCount;
     private static Vector3 _currentPos;
-    
+    private static Achievement[] _achievements;
+
     private int _selectedCharacter;
-    private PlayerManager _playerManager;
-    private Color _color;
+    private SaveManager _saveManager;
+    private static SpriteRenderer _color;
     
     [SerializeField] private GameObject _beam;  //for laser ability
     [SerializeField] private GameObject _aoe;   //for EMP ability
@@ -59,22 +61,28 @@ public class Player : MonoBehaviour
     {
         Enemy.enemyKill += AddKillCount;
         Enemy.ennemyCollisionWithPlayer += ReduceHealth;
+        PlayerController.reachedGameBorder += Suicide;
     }
+    
 
     private void OnDisable()
     {
         Enemy.enemyKill -= AddKillCount;
         Enemy.ennemyCollisionWithPlayer -= ReduceHealth;
+        PlayerController.reachedGameBorder -= Suicide;
     }
 
     private void Awake()
     {
-        _playerManager = GameObject.FindObjectOfType<PlayerManager>();
-        _color = _playerManager.SelectCharacterSprite(PlayerManager.Instance.GetSelectedCharacter());
-        gameObject.GetComponent<SpriteRenderer>().color = _color;
+        _saveManager = GameObject.FindObjectOfType<SaveManager>();
+        _color = _saveManager.SelectCharacterSprite(SaveManager.Instance.GetSelectedCharacter());
+        gameObject.GetComponent<SpriteRenderer>().sprite = _color.sprite;
+        gameObject.GetComponent<SpriteRenderer>().drawMode= _color.drawMode;
+        gameObject.GetComponent<SpriteRenderer>().size= _color.size;
         
-        _currentHealth = PlayerManager.Instance.Health;
-        _killCount = PlayerManager.Instance.Kills;
+        _currentHealth = SaveManager.Instance.Health;
+        _killCount = SaveManager.Instance.Kills;
+        _achievements = SaveManager.Achievements;
     }
     
     public void ReduceHealth(int value)
@@ -91,15 +99,20 @@ public class Player : MonoBehaviour
                 {
                     GameOver();
                 }
-                
-                playerReduceHealth?.Invoke();
+                updateHealthBarUI?.Invoke();
             }
         }
+    }
+    
+    private void Suicide()
+    {
+        ReduceHealth(10);
     }
     
     public void AddKillCount()
     {
         _killCount++;
+        updateKillCountUI?.Invoke();
     }
 
     private void GameOver()
@@ -123,14 +136,15 @@ public class Player : MonoBehaviour
     
     public static void UpdateStats()  //FOR SAVING DATA
     {
-        PlayerManager.Instance.Position = _currentPos;
-        PlayerManager.Instance.Health = _currentHealth;
-        PlayerManager.Instance.Kills = _killCount;
+        SaveManager.Instance.Position = _currentPos;
+        SaveManager.Instance.Health = _currentHealth;
+        SaveManager.Instance.Kills = _killCount;
+        SaveManager.Achievements = _achievements;
     }
 
     private void OnApplicationQuit()
     {
         UpdateStats();
-        PlayerManager.Instance.SaveGame();
+        SaveManager.Instance.SaveGame();
     }
 }

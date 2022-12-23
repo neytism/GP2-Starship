@@ -40,11 +40,13 @@ public class ObjectPool : MonoBehaviour
     private bool _notEnoughObjectsInPool = true;
 
     public List<GameObject> _objectsPool;
+    public List<GameObject> _objectsPoolUI;
     public Transform spawnedObjectsParent;
 
     private void Start()
     {
         _objectsPool = new List<GameObject>();
+        _objectsPoolUI = new List<GameObject>();
     }
 
     public GameObject GetObject(GameObject objectToPool, Vector3 pos)
@@ -80,6 +82,36 @@ public class ObjectPool : MonoBehaviour
         return null;
     }
     
+    public GameObject GetObjectUI(GameObject objectToPool, Transform pos)
+    {
+        _objectToPool = objectToPool;
+
+        if (_objectsPoolUI.Count > 0)
+        {
+            for (int i = 0; i < _objectsPoolUI.Count; i++)
+            {
+                //MUST SET PROPER TAGS PER PREFAB IN UNITY EDITOR
+                if (!_objectsPoolUI[i].activeInHierarchy && _objectsPoolUI[i].CompareTag(_objectToPool.tag)) 
+                {
+                    _objectsPoolUI[i].transform.position = transform.position;
+                    return _objectsPoolUI[i];
+                }
+            }
+        }
+
+        
+        if (_notEnoughObjectsInPool)
+        {
+            CreateObjectParentIfNeeded();
+            
+            GameObject obj = Instantiate(_objectToPool, pos);
+            _objectsPoolUI.Add(obj);
+            return obj;
+        }
+
+        return null;
+    }
+    
 
     private void CreateObjectParentIfNeeded()
     {
@@ -99,9 +131,9 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
-    public void Dispose()
+    public void Dispose(List<GameObject> pool)
     {
-        foreach (var t in _objectsPool)
+        foreach (var t in pool)
         {
             Destroy(t);
         }

@@ -11,26 +11,27 @@ using UnityEngine;
 public class EnemyBullet : MonoBehaviour
 {
     public GameObject smallDiePEffect;
+    private bool _isDead;
 
     private void OnEnable()
     {
+        _isDead = false;
         StartCoroutine(BulletLife(gameObject));
-    }
-
-    private void OnCollisionEnter2D(Collision2D col) 
-    {
-        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        
+       
         Player _player = GameObject.FindObjectOfType<Player>();
         
         if (col.gameObject.tag.Equals("Player")) {
             GameObject particle = ObjectPool.Instance.GetObject(smallDiePEffect, transform.position);
             particle.SetActive(true);
-            _player.ReduceHealth(1);
+            if (!_isDead)
+            {
+                _player.ReduceHealth(1);
+                _isDead = true;
+            }
         }
         else if (col.gameObject.tag.Equals("Bullet") || col.gameObject.tag.Equals("ExplosionRadius"))
         {

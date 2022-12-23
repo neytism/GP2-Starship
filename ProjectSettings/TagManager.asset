@@ -11,6 +11,8 @@ TagManager:
   - ParticleMiniExplosion
   - ExplosionRadius
   - AchievementPopUp
+  - Bounds
+  - Walls
   layers:
   - Default
   - TransparentFX
@@ -23,7 +25,7 @@ TagManager:
   - Enemy
   - Ability
   - EnemyBullet
-  - 
+  - Bounds
   - 
   - 
   - 

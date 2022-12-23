@@ -33,28 +33,22 @@ public class AchievementManager : MonoBehaviour
     
     #endregion
 
-    public static List<Achievement> achievements = new List<Achievement>();
-    
+    public static Achievement[] defaultAchievements;
     public static event Action<string,string> achievementNotification;
     
-    public static int totalKillInGame;
-    
+    private static int totalKillsInGame;
+    private static int totalDeathsInGame;
+
 
     private void Start()
     {
-        InitializeAchievements();
-        totalKillInGame = PlayerManager.TotalKillsInGame;
+        InitializeData();
     }
 
-    private void InitializeAchievements()
+    public static void InitializeData()
     {
-
-        if (achievements != null)
-        {
-            achievements.Add(new Achievement(0, "FIRST KILL!!", "Kill your first enemy"));
-            achievements.Add(new Achievement(1, "A MORAL SACRIFICE", "Die without killing a single enemy"));
-            achievements.Add(new Achievement(2, "100 KILLS!", "Kill 100 enemies"));
-        }
+        totalKillsInGame = SaveManager.Instance.TotalKillsInGame;
+        totalDeathsInGame = SaveManager.Instance.TotalDeathsInGame;
     }
 
     private void OnEnable()
@@ -71,12 +65,14 @@ public class AchievementManager : MonoBehaviour
 
     private void EnemyKillObserver()
     {
-        totalKillInGame++;
-        PlayerManager.TotalKillsInGame = totalKillInGame;
-        if (totalKillInGame == 1)
+        
+        totalKillsInGame++;
+        SaveManager.Instance.TotalKillsInGame = totalKillsInGame;
+        
+        if (totalKillsInGame == 1)
         {
             AchievementObserver(0);
-        }else if (totalKillInGame == 100)
+        }else if (totalKillsInGame == 100)
         {
             AchievementObserver(2);
         }
@@ -84,6 +80,9 @@ public class AchievementManager : MonoBehaviour
 
     private void PlayerDeathObserver()
     {
+        totalDeathsInGame++;
+        SaveManager.Instance.TotalDeathsInGame = totalDeathsInGame;
+        
         if (Player.KillCount == 0 )
         {
             AchievementObserver(1);
@@ -92,12 +91,29 @@ public class AchievementManager : MonoBehaviour
 
     private void AchievementObserver(int id)
     {
-        if (!achievements[id].achieved)
+        if (!SaveManager.Achievements[id].achieved)
         {
-            achievementNotification?.Invoke(achievements[id].title,achievements[id].description);
-            achievements[id].achieved = true;
+            achievementNotification?.Invoke(SaveManager.Achievements[id].title,SaveManager.Achievements[id].description);
+            SaveManager.Achievements[id].achieved = true;
         }
     }
+
+    public static Achievement[] DefaultAchievementList()
+    {
+        if (SaveManager.Instance.IsFirstTimePlaying || SaveManager.Achievements == null)
+        {
+            defaultAchievements = new Achievement[3];
+
+            defaultAchievements[0] = new Achievement(0, "FIRST KILL!!", "Kill your first enemy");
+            defaultAchievements[1] = new Achievement(1, "A MORAL SACRIFICE", "Die without killing a single enemy");
+            defaultAchievements[2] = new Achievement(2, "100 KILLS!", "Kill 100 enemies in total");
+            
+            SaveManager.Instance.IsFirstTimePlaying = false;
+        }
+        
+        return defaultAchievements;
+    }
+
 }
 
 public class Achievement

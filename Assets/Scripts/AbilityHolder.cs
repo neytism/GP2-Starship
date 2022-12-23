@@ -40,7 +40,7 @@ public class AbilityHolder : MonoBehaviour
 
     private void Awake()
     {
-        _ability = SelectAbilityType(PlayerManager.Instance.GetSelectedCharacter());
+        _ability = SelectAbilityType(SaveManager.Instance.GetSelectedCharacter());
         _duration = _ability.ActiveTime;
         _cooldown = _ability.Cooldown;
         _CDBar.fillAmount = 1;

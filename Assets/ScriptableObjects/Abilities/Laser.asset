@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Laser
   m_EditorClassIdentifier: 
   Name: Laser
-  Cooldown: 5
+  Cooldown: 8
   ActiveTime: 3

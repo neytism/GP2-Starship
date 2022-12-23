@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static event Action reachedGameBorder;
     private static bool _isPauseOrDead;
 
     //for movements
@@ -35,12 +36,12 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         //gets initial position from save
-        transform.position = PlayerManager.Instance.Position;
+        transform.position = SaveManager.Instance.Position;
         
         WeaponHolder _weaponHolder = GetComponent<WeaponHolder>();
-        _weapon = _weaponHolder.SelectWeaponType(PlayerManager.Instance.GetSelectedCharacter());
+        _weapon = _weaponHolder.SelectWeaponType(SaveManager.Instance.GetSelectedCharacter());
         
-        Debug.Log($"Selected on loading game scene: {PlayerManager.Instance.GetSelectedCharacter()}");
+        Debug.Log($"Selected on loading game scene: {SaveManager.Instance.GetSelectedCharacter()}");
     }
 
     // Update is called once per frame
@@ -87,6 +88,13 @@ public class PlayerController : MonoBehaviour
         get => _isPauseOrDead;
         set => _isPauseOrDead = value;
     }
-
     
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag.Equals("Walls"))
+        {
+            reachedGameBorder?.Invoke();
+        }
+    }
+
 }

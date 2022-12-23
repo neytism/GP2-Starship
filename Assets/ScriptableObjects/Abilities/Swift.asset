@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Swift
   m_EditorClassIdentifier: 
   Name: Swift
-  Cooldown: 3
+  Cooldown: 5
   ActiveTime: 0.6
   DashVelocity: 50
-  _swiftSound: {fileID: 8300000, guid: 0d17b7ae7db2ee54886f888224626e3e, type: 3}
