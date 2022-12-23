@@ -21,6 +21,8 @@ public class UserInterfaceManager : MonoBehaviour
     [SerializeField] private Image HPBar;
     [SerializeField] private GameObject outOfBoundsWarningImage;
     [SerializeField] public GameObject gameOverScreen;
+    [SerializeField] public GameObject gameOverScore;
+    [SerializeField] public GameObject gameOverHighScore;
     [SerializeField] private TextMeshProUGUI _killCountText;
     private int _killCountUI;
 

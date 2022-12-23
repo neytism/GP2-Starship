@@ -21,6 +21,14 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI BGMtext;
     [SerializeField] private TextMeshProUGUI SFXtext;
     
+    //for character selection
+    private List<GameObject> _characters;
+    [SerializeField] private List<String> _names;
+    [SerializeField] [TextArea] private List<String> _description;
+    [SerializeField] private SpriteRenderer _sr;
+    private TextMeshProUGUI _characterName;
+    private TextMeshProUGUI _characterDescription;
+    
     [SerializeField] private Color _locked;
     [SerializeField] private Color _unlocked;
 
@@ -28,6 +36,11 @@ public class MainMenu : MonoBehaviour
     private bool _isMutedSFX = false;
 
     private static bool _isLoaded;
+
+    private void Awake()
+    {
+        _characters = SaveManager.Instance.Characters;
+    }
 
     private void Start()
     {
@@ -42,18 +55,18 @@ public class MainMenu : MonoBehaviour
     public void Init(int value)  //initializes value of selected character before selecting
     {
         _selectedCharacter = value;
-        SaveManager.Instance.UpdateSelected(_selectedCharacter);
+        UpdateSelected(_selectedCharacter);
     }
     
     public void NextOption()
     {
         _selectedCharacter += 1;
-        if (_selectedCharacter == SaveManager.Instance.GetChartacterCount())
+        if (_selectedCharacter == _characters.Count)
         {
             _selectedCharacter = 0;
         }
 
-        SaveManager.Instance.UpdateSelected(_selectedCharacter);
+        UpdateSelected(_selectedCharacter);
     }
     
     public void BackOption()
@@ -61,11 +74,29 @@ public class MainMenu : MonoBehaviour
         _selectedCharacter -= 1;
         if (_selectedCharacter < 0)
         {
-            _selectedCharacter = SaveManager.Instance.GetChartacterCount()-1;
+            _selectedCharacter = _characters.Count-1;
         }
 
-        SaveManager.Instance.UpdateSelected(_selectedCharacter);
+        UpdateSelected(_selectedCharacter);
     }
+    
+    public void UpdateSelected(int value)
+    {
+        //for updating character selection on main menu
+        _sr = GameObject.Find("SelectedSkin").GetComponent<SpriteRenderer>();
+        _sr.sprite = _characters[value].GetComponent<SpriteRenderer>().sprite;
+        _sr.drawMode = _characters[value].GetComponent<SpriteRenderer>().drawMode;
+        _sr.size = _characters[value].GetComponent<SpriteRenderer>().size;
+        _characterName = GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
+        _characterDescription = GameObject.Find("Description").GetComponent<TextMeshProUGUI>();
+        _characterName.text = _names[value];
+        _characterDescription.text = _description[value];
+        _selectedCharacter = value;
+        SaveManager.Instance.GetSelectedCharacter = _selectedCharacter;
+        Debug.Log($"Selected: {value}");
+    }
+    
+   
 
     public void QuitGame()
     {

@@ -100,7 +100,7 @@ public class AchievementManager : MonoBehaviour
 
     public static Achievement[] DefaultAchievementList()
     {
-        if (SaveManager.Instance.IsFirstTimePlaying || SaveManager.Achievements == null)
+        if (SaveManager.isFirstTimePlaying || SaveManager.Achievements == null)
         {
             defaultAchievements = new Achievement[3];
 
@@ -108,7 +108,7 @@ public class AchievementManager : MonoBehaviour
             defaultAchievements[1] = new Achievement(1, "A MORAL SACRIFICE", "Die without killing a single enemy");
             defaultAchievements[2] = new Achievement(2, "100 KILLS!", "Kill 100 enemies in total");
             
-            SaveManager.Instance.IsFirstTimePlaying = false;
+            SaveManager.isFirstTimePlaying = false;
         }
         
         return defaultAchievements;

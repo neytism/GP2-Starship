@@ -39,9 +39,9 @@ public class PlayerController : MonoBehaviour
         transform.position = SaveManager.Instance.Position;
         
         WeaponHolder _weaponHolder = GetComponent<WeaponHolder>();
-        _weapon = _weaponHolder.SelectWeaponType(SaveManager.Instance.GetSelectedCharacter());
+        _weapon = _weaponHolder.SelectWeaponType(SaveManager.Instance.GetSelectedCharacter);
         
-        Debug.Log($"Selected on loading game scene: {SaveManager.Instance.GetSelectedCharacter()}");
+        Debug.Log($"Selected on loading game scene: {SaveManager.Instance.GetSelectedCharacter}");
     }
 
     // Update is called once per frame

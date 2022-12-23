@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _saveManager = GameObject.FindObjectOfType<SaveManager>();
-        _color = _saveManager.SelectCharacterSprite(SaveManager.Instance.GetSelectedCharacter());
+        _color = _saveManager.SelectCharacterSprite(SaveManager.Instance.GetSelectedCharacter);
         gameObject.GetComponent<SpriteRenderer>().sprite = _color.sprite;
         gameObject.GetComponent<SpriteRenderer>().drawMode= _color.drawMode;
         gameObject.GetComponent<SpriteRenderer>().size= _color.size;

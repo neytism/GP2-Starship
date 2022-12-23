@@ -40,20 +40,17 @@ public class SaveManager : MonoBehaviour
 
     //calls LoadData on awake
     
-    [SerializeField] private PlayerData _newPlayerData;
-    [SerializeField] private PlayerData _localPlayerData;
+    private PlayerData _newPlayerData;
+    private PlayerData _localPlayerData;
 
     private const string SAVE_DATA_KEY = "PlayerData";
     
-    //for character selection, can be moved to MainMenu Method
+    
     [SerializeField] private List<GameObject> _characters;
-    [SerializeField] private List<String> _names;
-    [SerializeField] private List<String> _description;
-    [SerializeField] private SpriteRenderer _sr;
-    private TextMeshProUGUI _characterName;
-    private TextMeshProUGUI _characterDescription;
+    public List<GameObject> Characters => _characters;
 
     //local data
+    public static bool isFirstTimePlaying;
     private static bool _isNewGame;
     private static int _health = 10;
     private static int _kills;
@@ -63,20 +60,18 @@ public class SaveManager : MonoBehaviour
     private static int _totalKillsInGame;
     private static int _totalDeathsInGame;
     private static int _highScore;
-    private static bool _isFirstTimePlaying;
     private static int _lastRoundIn;
 
     #region GetSets
 
-    public int GetSelectedCharacter()
+    
+    public int GetSelectedCharacter
     {
-        return _selectedCharacter;
-    }
+        get => _selectedCharacter;
+        set => _selectedCharacter = value;
 
-    public int GetChartacterCount()
-    {
-        return _characters.Count;
     }
+    
     public bool IsNewGame
     {
         get => _isNewGame;
@@ -127,8 +122,8 @@ public class SaveManager : MonoBehaviour
 
     public bool IsFirstTimePlaying
     {
-        get => _isFirstTimePlaying;
-        set => _isFirstTimePlaying = value;
+        get => isFirstTimePlaying;
+        set => isFirstTimePlaying = value;
     }
 
     public int LastRoundIn
@@ -138,30 +133,15 @@ public class SaveManager : MonoBehaviour
     }
 
     #endregion
-
+    
+    //SAVE SYSTEM
+    //SAVE SYSTEM
+    //SAVE SYSTEM
+    
     public SpriteRenderer SelectCharacterSprite(int index)
     {
         return _characters[index].GetComponent<SpriteRenderer>();
     }
-
-    public void UpdateSelected(int value)
-    {
-        //for updating character selection on main menu
-        _sr = GameObject.Find("SelectedSkin").GetComponent<SpriteRenderer>();
-        _sr.sprite = _characters[value].GetComponent<SpriteRenderer>().sprite;
-        _sr.drawMode = _characters[value].GetComponent<SpriteRenderer>().drawMode;
-        _sr.size = _characters[value].GetComponent<SpriteRenderer>().size;
-        _characterName = GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
-        _characterDescription = GameObject.Find("Description").GetComponent<TextMeshProUGUI>();
-        _characterName.text = _names[value];
-        _characterDescription.text = _description[value];
-        _selectedCharacter = value;
-        Debug.Log($"Selected: {value}");
-    }
-
-    //SAVE SYSTEM
-    //SAVE SYSTEM
-    //SAVE SYSTEM
 
     public void NewGame()
     {
@@ -221,7 +201,7 @@ public class SaveManager : MonoBehaviour
         _totalKillsInGame = playerData.TotalKillsInGame;
         _totalDeathsInGame = playerData.TotalDeathsInGame;
         _highScore = playerData.HighScore;
-        _isFirstTimePlaying = playerData.IsFirstTimePlaying;
+        isFirstTimePlaying = playerData.IsFirstTimePlaying;
         _lastRoundIn = playerData.LastRoundIn;
     }
     
@@ -234,7 +214,7 @@ public class SaveManager : MonoBehaviour
     public void SaveGame()
     {
         //save data
-        _localPlayerData = new PlayerData(_isNewGame, _health,_kills, _position, _selectedCharacter, _achievements, _totalKillsInGame, _totalDeathsInGame, _highScore, _isFirstTimePlaying, _lastRoundIn);
+        _localPlayerData = new PlayerData(_isNewGame, _health,_kills, _position, _selectedCharacter, _achievements, _totalKillsInGame, _totalDeathsInGame, _highScore, isFirstTimePlaying, _lastRoundIn);
         var playerData = JsonConvert.SerializeObject(_localPlayerData, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
         Debug.Log($"{nameof(SaveManager)}.{nameof(SaveGame)} : {playerData}");
         PlayerPrefs.SetString(SAVE_DATA_KEY, playerData);
