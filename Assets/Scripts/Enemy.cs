@@ -57,9 +57,18 @@ public class Enemy : MonoBehaviour
             
                 if (col.gameObject.tag.Equals("Player")) {
                     ennemyCollisionWithPlayer?.Invoke(_damage);
+                    //no enemy kill if not moving
+                    if (!(col.gameObject.GetComponent<PlayerController>()._moveDirection.x == 0  && col.gameObject.GetComponent<PlayerController>()._moveDirection.y == 0))
+                    {
+                        enemyKill?.Invoke();
+                    }
                 }
-            
-                enemyKill?.Invoke();
+
+                if (col.gameObject.tag.Equals("Bullet") || col.gameObject.tag.Equals("ExplosionRadius"))
+                {
+                    enemyKill?.Invoke();
+                }
+                
                 _isDead = true;
                 gameObject.SetActive(false);
             }

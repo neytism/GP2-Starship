@@ -21,8 +21,9 @@ public class UserInterfaceManager : MonoBehaviour
     [SerializeField] private Image HPBar;
     [SerializeField] private GameObject outOfBoundsWarningImage;
     [SerializeField] public GameObject gameOverScreen;
-    [SerializeField] public GameObject gameOverScore;
-    [SerializeField] public GameObject gameOverHighScore;
+    [SerializeField] public TextMeshProUGUI gameOverScore;
+    [SerializeField] public GameObject gameOverHighScoreText;
+    [SerializeField] public TextMeshProUGUI gameOverHighScore;
     [SerializeField] private TextMeshProUGUI _killCountText;
     private int _killCountUI;
 
@@ -153,6 +154,14 @@ public class UserInterfaceManager : MonoBehaviour
         yield return new WaitForSeconds(3);
         AudioManager.Instance.PlayOnce(AudioManager.Sounds.GameOver);
         gameOverScreen.SetActive(true);
+        _killCountText.text = "";
+        gameOverScore.text = Player.KillCount.ToString();
+        if (Player.KillCount > SaveManager.Instance.HighScore)
+        {
+            gameOverHighScoreText.SetActive(true);
+            SaveManager.Instance.HighScore = Player.KillCount;
+        }
+        gameOverHighScore.text = "HIGH SCORE: " + SaveManager.Instance.HighScore.ToString();
         
         Time.timeScale = 0f;
     }
