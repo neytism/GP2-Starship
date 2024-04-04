@@ -8,7 +8,7 @@ using UnityEngine;
 //  
 
 
-public class ParticleSystem : MonoBehaviour
+public class ParticleManager : MonoBehaviour
 {
     [SerializeField] private float timeBeforeDisabling;
     private void OnEnable()
